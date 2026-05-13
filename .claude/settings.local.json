@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"d:\\\\garoto\\\\projects\\\\soluciondigital\\\\resources\\\\js\\\\\" -Recurse -Force | Select-Object FullName, PSIsContainer | Sort-Object FullName | Format-Table -AutoSize)",
+      "Bash(Remove-Item -Recurse -Force \"d:\\\\garoto\\\\projects\\\\soluciondigital\\\\resources\\\\js\\\\layouts\\\\app\")",
+      "Bash(Remove-Item -Recurse -Force \"d:\\\\garoto\\\\projects\\\\soluciondigital\\\\resources\\\\js\\\\layouts\\\\auth\")"
+    ]
+  }
+}
