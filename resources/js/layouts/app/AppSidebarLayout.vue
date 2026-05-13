@@ -16,6 +16,15 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
+    <!--
+        Estructura del admin con sidebar:
+        1. AppShell: proveedor/base del layout.
+        2. AppSidebar: menu lateral.
+        3. AppContent: cuerpo principal.
+        4. AppSidebarHeader: barra superior con breadcrumbs.
+        5. slot: aqui entra cada pagina admin.
+        6. Toaster: notificaciones flotantes.
+    -->
     <AppShell variant="sidebar">
         <AppSidebar />
         <AppContent variant="sidebar" class="overflow-x-hidden">

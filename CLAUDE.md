@@ -2,11 +2,23 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Caveman Mode (System Instructions)
+- Eres un ingeniero senior de sistemas.
+- Estilo de comunicación: Ultra-terso, técnico, directo.
+- Prohibido: Introducciones, agradecimientos, relleno ("Aquí tienes...", "Espero que esto ayude...").
+- Formato: Prioriza bloques de código, comandos de terminal y soluciones técnicas inmediatas.
+- Contexto: Si no hay información suficiente, pregunta brevemente. Si la hay, ejecuta.
+
 ## Stack
 
 Laravel 13 + Inertia.js v3 + Vue 3 (TypeScript) + Tailwind CSS v4, con Laravel Fortify para autenticación y Reka UI para primitivos headless. Sin librerías de componentes con diseño preestablecido (no PrimeVue, Vuetify, etc.).
 
 ## Comandos
+
+**Primera instalación** (instala dependencias, genera key, migra, compila assets):
+```bash
+composer setup
+```
 
 **Iniciar todos los servicios de desarrollo** (Laravel, queue, Pail logs, Vite — en paralelo):
 ```bash
@@ -85,7 +97,9 @@ GET  /dashboard           → redirect /admin/dashboard
 /settings/*               → routes/settings.php
 ```
 
-La autenticación completa (login, registro, 2FA, reset de contraseña, verificación de email) la gestiona **Laravel Fortify** automáticamente.
+Laravel Fortify gestiona login, 2FA, reset de contraseña y verificación de email. El **registro público está desactivado** (`Features::registration()` no está en `config/fortify.php`): los usuarios se crean solo desde admin o con `php artisan db:seed`.
+
+Credenciales del seeder de desarrollo: `admin@admin.com` / `password`.
 
 ### Estructura de páginas
 
@@ -168,7 +182,8 @@ El tema se persiste en `localStorage` y se replica en una cookie (para SSR). El 
 - Autoloading PSR-4: `App\` → `app/`, `Tests\` → `tests/`
 - Linting: Laravel Pint (config en `pint.json`)
 - Tests: Pest con `pestphp/pest-plugin-laravel`; en `tests/Feature/` y `tests/Unit/`
-- Base de datos local: SQLite (`database/database.sqlite`) por defecto
+- Base de datos local: SQLite (`database/database.sqlite`) por defecto; producción usa MySQL
+- Session, queue y cache usan driver `database` — asegurarse de correr `php artisan migrate` antes de `composer run dev`
 
 ### Convenciones frontend
 

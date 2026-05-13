@@ -32,6 +32,10 @@ function formatDate(dateStr: string) {
         day: 'numeric',
     });
 }
+
+function paginationLabel(label: string) {
+    return label.replace('&laquo;', '‹').replace('&raquo;', '›');
+}
 </script>
 
 <template>
@@ -113,21 +117,29 @@ function formatDate(dateStr: string) {
                 Mostrando {{ users.from }} – {{ users.to }} de {{ users.total }}
             </p>
             <div class="flex items-center gap-1">
-                <component
-                    :is="link.url ? Link : 'span'"
+                <template
                     v-for="(link, i) in users.links"
                     :key="i"
-                    :href="link.url ?? undefined"
-                    class="inline-flex h-8 min-w-[2rem] items-center justify-center rounded-lg px-2 text-sm transition-colors"
-                    :class="[
-                        link.active
-                            ? 'bg-gray-900 font-semibold text-white dark:bg-white dark:text-gray-900'
-                            : link.url
-                              ? 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
-                              : 'cursor-not-allowed text-gray-300 dark:text-gray-600',
-                    ]"
-                    v-html="link.label"
-                />
+                >
+                    <Link
+                        v-if="link.url"
+                        :href="link.url"
+                        class="inline-flex h-8 min-w-[2rem] items-center justify-center rounded-lg px-2 text-sm transition-colors"
+                        :class="[
+                            link.active
+                                ? 'bg-gray-900 font-semibold text-white dark:bg-white dark:text-gray-900'
+                                : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700',
+                        ]"
+                    >
+                        {{ paginationLabel(link.label) }}
+                    </Link>
+                    <span
+                        v-else
+                        class="inline-flex h-8 min-w-[2rem] cursor-not-allowed items-center justify-center rounded-lg px-2 text-sm text-gray-300 transition-colors dark:text-gray-600"
+                    >
+                        {{ paginationLabel(link.label) }}
+                    </span>
+                </template>
             </div>
         </div>
     </div>

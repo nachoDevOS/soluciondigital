@@ -6,9 +6,13 @@ import PublicLayout from '@/layouts/PublicLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
 import { initializeFlashToast } from '@/lib/flashToast';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const configuredAppName = import.meta.env.VITE_APP_NAME || 'Solución Digital';
+const appName = configuredAppName === 'Laravel' ? 'Solución Digital' : configuredAppName;
 
-createInertiaApp({
+// Inicializa light / dark mode antes de que monte la app.
+initializeTheme();
+
+void createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
     layout: (name) => {
         switch (true) {
@@ -33,10 +37,10 @@ createInertiaApp({
     progress: {
         color: '#4B5563',
     },
+}).then(() => {
+    document.documentElement.classList.add('app-ready');
+    document.documentElement.classList.remove('app-loading');
 });
 
-// Inicializa light / dark mode antes de que monte la app
-initializeTheme();
-
-// Escucha flash data del servidor para mostrar toasts
+// Escucha flash data del servidor para mostrar toasts.
 initializeFlashToast();

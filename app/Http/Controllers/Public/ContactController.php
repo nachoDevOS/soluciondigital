@@ -13,6 +13,8 @@ class ContactController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:50'],
+            'business_type' => ['nullable', 'string', 'max:120'],
             'message' => ['required', 'string', 'max:5000'],
         ]);
 
@@ -21,7 +23,7 @@ class ContactController extends Controller
         return back()->with([
             'toast' => [
                 'type' => 'success',
-                'message' => '¡Mensaje enviado! Te responderemos pronto.',
+                'message' => 'Mensaje enviado. Te responderemos pronto.',
             ],
         ]);
     }

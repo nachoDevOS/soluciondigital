@@ -1,122 +1,1806 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
+import {
+    Boxes,
+    ChartLine,
+    ChartPie,
+    Clock,
+    Facebook,
+    Images,
+    Instagram,
+    Mail,
+    Menu,
+    MessageCircle,
+    MonitorSmartphone,
+    PawPrint,
+    Pill,
+    Rocket,
+    ShieldCheck,
+    ShoppingCart,
+    Store,
+    Utensils,
+    Wrench,
+    X,
+    Zap,
+} from 'lucide-vue-next';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import type { Component } from 'vue';
+import { Toaster } from '@/components/ui/sonner';
 
-const { canRegister } = defineProps<{
-    canRegister: boolean;
-}>();
+type BusinessCategory = 'restaurant' | 'retail' | 'pharmacy' | 'hardware' | 'vet';
+type PortfolioFilter = 'all' | BusinessCategory;
 
-const features = [
+// Estado reactivo de la pagina.
+// ref() es una variable que Vue puede observar y usar para actualizar la vista.
+const isScrolled = ref(false);
+const mobileMenuOpen = ref(false);
+const selectedFilter = ref<PortfolioFilter>('all');
+
+// useForm es de Inertia. Sirve para enviar datos a Laravel sin recargar la pagina.
+const form = useForm({
+    name: '',
+    email: '',
+    phone: '',
+    business_type: '',
+    message: '',
+});
+
+// Links del menu superior de la landing.
+const navLinks = [
+    { label: 'Inicio', href: '#inicio' },
+    { label: 'Soluciones', href: '#soluciones' },
+    { label: 'Casos de Éxito', href: '#portafolio' },
+    { label: 'Beneficios', href: '#beneficios' },
+    { label: 'Testimonios', href: '#testimonios' },
+];
+
+// Tarjetas de "Soluciones". Si quieres agregar otro tipo de negocio, empieza aqui.
+const solutions: Array<{
+    key: string;
+    title: string;
+    description: string;
+    icon: Component;
+    buttonClass: string;
+}> = [
     {
-        icon: '🔐',
-        title: 'Autenticación completa',
+        key: 'restaurante',
+        title: 'Restaurantes',
         description:
-            'Login, registro, 2FA, recuperación y verificación de email incluidos vía Laravel Fortify.',
+            'Sistema integral con gestión de mesas, pedidos, cocina, inventario y reportes para optimizar tu restaurante.',
+        icon: Utensils,
+        buttonClass: 'btn-restaurant',
     },
     {
-        icon: '⚙️',
-        title: 'Panel de administración',
+        key: 'comercio',
+        title: 'Comercios',
         description:
-            'Dashboard, gestión de usuarios y configuración de perfil listos para usar.',
+            'Punto de venta completo con control de inventario, facturación electrónica y reportes de ventas.',
+        icon: ShoppingCart,
+        buttonClass: 'btn-retail',
     },
     {
-        icon: '⚡',
-        title: 'Vue 3 + Inertia.js',
-        description: 'SPA sin necesidad de API REST. Las rutas las maneja Laravel de forma nativa.',
+        key: 'farmacia',
+        title: 'Farmacias',
+        description:
+            'Sistema especializado con control de caducidades, recetas médicas y manejo de proveedores farmacéuticos.',
+        icon: Pill,
+        buttonClass: 'btn-pharmacy',
     },
     {
-        icon: '🎨',
-        title: 'Tailwind CSS v4',
-        description: 'Estilos utility-first con modo oscuro configurado desde el primer día.',
+        key: 'ferreteria',
+        title: 'Ferreterías',
+        description:
+            'Software para gestión de múltiples almacenes, variedad de medidas y conversiones de productos.',
+        icon: Wrench,
+        buttonClass: 'btn-hardware',
+    },
+    {
+        key: 'veterinaria',
+        title: 'Veterinarias',
+        description:
+            'Historial clínico de mascotas, control de vacunas, citas, hospitalización y recordatorios automáticos.',
+        icon: PawPrint,
+        buttonClass: 'btn-vet',
     },
 ];
+
+// Beneficios que se muestran en la seccion "Por que elegirnos".
+const features = [
+    {
+        title: 'Aumento de Ventas',
+        description:
+            'Identifica oportunidades de venta cruzada, gestiona promociones y analiza el comportamiento de tus clientes para aumentar tus ingresos.',
+        icon: ChartLine,
+    },
+    {
+        title: 'Ahorro de Tiempo',
+        description:
+            'Automatiza procesos repetitivos como facturación, control de inventario y reportes, para enfocarte en hacer crecer tu negocio.',
+        icon: Clock,
+    },
+    {
+        title: 'Control de Inventario',
+        description:
+            'Mantén un control preciso de tu stock, recibe alertas de productos por agotarse y evita pérdidas por caducidad u obsolescencia.',
+        icon: Boxes,
+    },
+    {
+        title: 'Acceso en cualquier lugar',
+        description:
+            'Consulta tu negocio desde cualquier dispositivo con internet, manteniendo la seguridad y confidencialidad de tus datos.',
+        icon: MonitorSmartphone,
+    },
+];
+
+// Botones para filtrar los casos de exito.
+const filters: Array<{ label: string; value: PortfolioFilter; icon?: Component }> = [
+    { label: 'Todos', value: 'all' },
+    { label: 'Restaurantes', value: 'restaurant', icon: Utensils },
+    { label: 'Comercios', value: 'retail', icon: Store },
+    { label: 'Farmacias', value: 'pharmacy', icon: Pill },
+    { label: 'Ferreterías', value: 'hardware', icon: Wrench },
+    { label: 'Veterinarias', value: 'vet', icon: PawPrint },
+];
+
+// Casos de exito que aparecen en el portafolio.
+const portfolioItems: Array<{
+    category: BusinessCategory;
+    categoryLabel: string;
+    badgeClass: string;
+    title: string;
+    description: string;
+    image: string;
+    alt: string;
+}> = [
+    {
+        category: 'restaurant',
+        categoryLabel: 'Restaurante',
+        badgeClass: 'restaurant-badge',
+        title: 'Restaurante "La Tradición"',
+        description:
+            'Sistema completo con módulos de mesas, cocina, delivery y reportes que aumentó su eficiencia en un 40%.',
+        image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+        alt: 'Interior de restaurante moderno',
+    },
+    {
+        category: 'retail',
+        categoryLabel: 'Comercio',
+        badgeClass: 'retail-badge',
+        title: 'Tienda "El Buen Precio"',
+        description:
+            'Punto de venta con control de inventario que redujo las pérdidas por caducidad en un 65%.',
+        image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+        alt: 'Tienda con carrito de compras',
+    },
+    {
+        category: 'pharmacy',
+        categoryLabel: 'Farmacia',
+        badgeClass: 'pharmacy-badge',
+        title: 'Farmacia "Salud Total"',
+        description:
+            'Sistema especializado que automatizó el control de caducidades y manejo de recetas médicas.',
+        image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+        alt: 'Medicamentos en estantería de farmacia',
+    },
+    {
+        category: 'hardware',
+        categoryLabel: 'Ferretería',
+        badgeClass: 'hardware-badge',
+        title: 'Ferretería "El Constructor"',
+        description:
+            'Sistema multi-almacén con conversión de medidas que mejoró la precisión del inventario.',
+        image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+        alt: 'Personas revisando productos de ferretería',
+    },
+    {
+        category: 'vet',
+        categoryLabel: 'Veterinaria',
+        badgeClass: 'vet-badge',
+        title: 'Clínica "Huellitas"',
+        description:
+            'Gestión integral de pacientes, control de vacunas y agenda de citas automatizada.',
+        image: 'https://images.unsplash.com/photo-1623366302587-bce731d08e83?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+        alt: 'Atención veterinaria profesional',
+    },
+];
+
+// Testimonios de clientes. Son datos estaticos por ahora.
+const testimonials = [
+    {
+        quote:
+            'El sistema para nuestro restaurante ha sido revolucionario. Ahora podemos atender más mesas con menos personal y nuestros clientes notan la diferencia en el servicio.',
+        name: 'Carlos Mendoza',
+        role: 'Dueño, Restaurante "La Parrilla"',
+        image: 'https://randomuser.me/api/portraits/men/32.jpg',
+    },
+    {
+        quote:
+            'Desde que implementamos el sistema en nuestra farmacia, hemos reducido las pérdidas por caducidad en un 70% y el tiempo para hacer inventario se redujo de 2 días a 2 horas.',
+        name: 'María Fernández',
+        role: 'Gerente, Farmacia "Bienestar"',
+        image: 'https://randomuser.me/api/portraits/women/44.jpg',
+    },
+    {
+        quote:
+            'El punto de venta transformó nuestro negocio. Ahora sabemos qué productos se venden más, en qué horarios y podemos tomar decisiones basadas en datos.',
+        name: 'Roberto Jiménez',
+        role: 'Dueño, Minimercado "El Ahorro"',
+        image: 'https://randomuser.me/api/portraits/men/75.jpg',
+    },
+];
+
+// computed() recalcula automaticamente cuando selectedFilter cambia.
+const filteredPortfolioItems = computed(() =>
+    selectedFilter.value === 'all'
+        ? portfolioItems
+        : portfolioItems.filter((item) => item.category === selectedFilter.value),
+);
+
+// Cambia el estilo del header cuando el usuario baja la pagina.
+function handleScroll() {
+    isScrolled.value = window.scrollY > 50;
+}
+
+// Navegacion suave a una seccion de la misma pagina.
+function scrollToSection(hash: string) {
+    const section = document.querySelector(hash);
+
+    if (!section) {
+        return;
+    }
+
+    mobileMenuOpen.value = false;
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Envia el formulario al controlador Laravel: ContactController@store.
+function submit() {
+    form.post('/contact', {
+        preserveScroll: true,
+        onSuccess: () => form.reset(),
+    });
+}
+
+// onMounted() se ejecuta cuando Vue ya puso el componente en pantalla.
+onMounted(() => {
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+});
+
+// Limpia el evento de scroll si Vue desmonta esta pagina.
+onBeforeUnmount(() => {
+    window.removeEventListener('scroll', handleScroll);
+});
 </script>
 
 <template>
-    <Head title="Inicio" />
+    <Head title="Soluciones Tecnológicas para Negocios">
+        <meta
+            name="description"
+            content="Sistemas personalizados para restaurantes, ventas, farmacias, ferreterías, veterinarias y más. Automatiza y optimiza tu negocio con soluciones tecnológicas a medida."
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;600;700;800&display=swap"
+            rel="stylesheet"
+        />
+    </Head>
 
-    <!-- Hero -->
-    <section class="flex flex-col items-center justify-center px-4 py-24 text-center sm:py-36">
-        <div class="mx-auto max-w-3xl">
-            <span class="mb-6 inline-flex items-center rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                Laravel + Vue 3 + Inertia.js
-            </span>
-            <h1 class="mt-4 text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl dark:text-white">
-                Plantilla lista para<br />
-                <span class="text-gray-500">producción</span>
-            </h1>
-            <p class="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
-                Starter kit completo con sitio público y panel de administración. Sin componentes de
-                terceros, solo Vue puro con Tailwind.
-            </p>
-            <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
-                <Link
-                    v-if="canRegister"
-                    href="/register"
-                    class="rounded-xl bg-gray-900 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-gray-700 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
-                >
-                    Crear cuenta
-                </Link>
-                <Link
-                    href="/login"
-                    class="rounded-xl border border-gray-300 px-6 py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
-                >
-                    Iniciar sesión →
-                </Link>
-            </div>
-        </div>
-    </section>
+    <div class="landing-page">
+        <header :class="{ scrolled: isScrolled }">
+            <div class="container">
+                <nav aria-label="Navegación principal">
+                    <button type="button" class="logo-button" @click="scrollToSection('#inicio')">
+                        Solución <span>Digital</span>
+                    </button>
 
-    <!-- Features -->
-    <section class="border-t border-gray-200 bg-gray-50 px-4 py-20 dark:border-gray-800 dark:bg-gray-900">
-        <div class="mx-auto max-w-7xl">
-            <div class="text-center">
-                <h2 class="text-3xl font-bold text-gray-900 dark:text-white">
-                    Todo lo que necesitas para empezar
-                </h2>
-                <p class="mt-4 text-gray-600 dark:text-gray-400">
-                    Una base sólida para tu próximo proyecto web.
-                </p>
-            </div>
-            <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                <div
-                    v-for="feature in features"
-                    :key="feature.title"
-                    class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
-                >
-                    <div class="text-4xl">{{ feature.icon }}</div>
-                    <h3 class="mt-4 text-base font-semibold text-gray-900 dark:text-white">
-                        {{ feature.title }}
-                    </h3>
-                    <p class="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
-                        {{ feature.description }}
-                    </p>
+                    <ul class="nav-links">
+                        <li v-for="link in navLinks" :key="link.href">
+                            <button type="button" @click="scrollToSection(link.href)">
+                                {{ link.label }}
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button" class="btn btn-sm" @click="scrollToSection('#contacto')">
+                                Contacto
+                            </button>
+                        </li>
+                    </ul>
+
+                    <button
+                        type="button"
+                        class="mobile-menu-button"
+                        :aria-label="mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'"
+                        @click="mobileMenuOpen = !mobileMenuOpen"
+                    >
+                        <X v-if="mobileMenuOpen" class="icon" />
+                        <Menu v-else class="icon" />
+                    </button>
+                </nav>
+
+                <div v-if="mobileMenuOpen" class="mobile-menu">
+                    <button
+                        v-for="link in navLinks"
+                        :key="link.href"
+                        type="button"
+                        @click="scrollToSection(link.href)"
+                    >
+                        {{ link.label }}
+                    </button>
+                    <button type="button" class="btn btn-sm" @click="scrollToSection('#contacto')">
+                        Contacto
+                    </button>
                 </div>
             </div>
-        </div>
-    </section>
+        </header>
 
-    <!-- CTA -->
-    <section class="px-4 py-24">
-        <div class="mx-auto max-w-2xl text-center">
-            <h2 class="text-3xl font-bold text-gray-900 dark:text-white">¿Listo para construir?</h2>
-            <p class="mt-4 text-gray-600 dark:text-gray-400">
-                Clona el repositorio y empieza tu aplicación hoy mismo.
-            </p>
-            <div class="mt-10 flex flex-wrap justify-center gap-4">
-                <Link
-                    v-if="canRegister"
-                    href="/register"
-                    class="rounded-xl bg-gray-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-700 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
-                >
-                    Crear cuenta gratis
-                </Link>
-                <Link
-                    href="/about"
-                    class="rounded-xl border border-gray-300 px-6 py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
-                >
-                    Saber más
-                </Link>
+        <main>
+            <section id="inicio" class="hero">
+                <div class="hero-container">
+                    <div class="hero-text reveal">
+                        <div class="hero-badge">
+                            <Rocket class="badge-icon" />
+                            Potencia tu crecimiento
+                        </div>
+                        <h1>
+                            Software Inteligente para
+                            <br />
+                            <span>Tu Negocio</span>
+                        </h1>
+                        <p>
+                            Deja atrás las hojas de cálculo y el desorden. Automatiza inventarios,
+                            ventas y facturación con una plataforma diseñada para escalar contigo.
+                        </p>
+                        <div class="hero-btns">
+                            <button type="button" class="btn" @click="scrollToSection('#contacto')">
+                                Solicitar Demo
+                            </button>
+                            <button type="button" class="btn-outline" @click="scrollToSection('#soluciones')">
+                                Ver Soluciones
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="hero-visual reveal delay-1">
+                        <div class="visual-card">
+                            <img
+                                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80"
+                                alt="Dashboard moderno para gestión de negocios"
+                            />
+                            <div class="floating-icon icon-1">
+                                <ChartPie class="floating-svg" />
+                            </div>
+                            <div class="floating-icon icon-2">
+                                <ShieldCheck class="floating-svg" />
+                            </div>
+                            <div class="floating-icon icon-3">
+                                <Zap class="floating-svg" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-fade" aria-hidden="true"></div>
+            </section>
+
+            <section id="soluciones" class="section business-solutions">
+                <div class="container">
+                    <div class="section-title">
+                        <span>Nuestros Servicios</span>
+                        <h2>Soluciones para tu Negocio</h2>
+                        <p>
+                            Sistemas especializados diseñados para las necesidades específicas de
+                            cada tipo de negocio.
+                        </p>
+                    </div>
+
+                    <div class="solutions-grid">
+                        <article
+                            v-for="(solution, index) in solutions"
+                            :key="solution.key"
+                            class="solution-card reveal"
+                            :class="[solution.key, `delay-${Math.min(index, 3)}`]"
+                        >
+                            <div class="solution-icon-wrapper">
+                                <component :is="solution.icon" class="card-icon" />
+                            </div>
+                            <h3>{{ solution.title }}</h3>
+                            <p>{{ solution.description }}</p>
+                            <button
+                                type="button"
+                                class="btn btn-sm"
+                                :class="solution.buttonClass"
+                                @click="scrollToSection('#contacto')"
+                            >
+                                Solicitar Demo
+                            </button>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section id="beneficios" class="section features">
+                <div class="container">
+                    <div class="section-title">
+                        <span>Por qué elegirnos</span>
+                        <h2>Beneficios Clave</h2>
+                        <p>Lo que nuestros sistemas pueden hacer por tu negocio.</p>
+                    </div>
+
+                    <div class="features-list">
+                        <article
+                            v-for="(feature, index) in features"
+                            :key="feature.title"
+                            class="feature-item reveal"
+                            :class="`delay-${Math.min(index, 3)}`"
+                        >
+                            <div class="feature-icon">
+                                <component :is="feature.icon" class="feature-svg" />
+                            </div>
+                            <div class="feature-text">
+                                <h3>{{ feature.title }}</h3>
+                                <p>{{ feature.description }}</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section id="portafolio" class="section portfolio">
+                <div class="container">
+                    <div class="section-title">
+                        <span>Portafolio</span>
+                        <h2>Casos de Éxito</h2>
+                        <p>Algunos ejemplos de sistemas implementados para nuestros clientes.</p>
+                    </div>
+
+                    <div class="business-type-selector">
+                        <div class="business-type-buttons" role="list" aria-label="Filtrar casos de éxito">
+                            <button
+                                v-for="filter in filters"
+                                :key="filter.value"
+                                type="button"
+                                class="filter-btn"
+                                :class="{ active: selectedFilter === filter.value }"
+                                @click="selectedFilter = filter.value"
+                            >
+                                <component v-if="filter.icon" :is="filter.icon" class="filter-icon" />
+                                {{ filter.label }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="portfolio-grid">
+                        <article
+                            v-for="item in filteredPortfolioItems"
+                            :key="item.title"
+                            class="portfolio-item reveal"
+                        >
+                            <div class="portfolio-img">
+                                <img :src="item.image" :alt="item.alt" />
+                                <span class="portfolio-category" :class="item.badgeClass">
+                                    {{ item.categoryLabel }}
+                                </span>
+                            </div>
+                            <div class="portfolio-info">
+                                <h3>{{ item.title }}</h3>
+                                <p>{{ item.description }}</p>
+                                <div class="portfolio-links">
+                                    <button type="button" @click="scrollToSection('#contacto')">
+                                        <Images class="inline-icon" />
+                                        Ver capturas
+                                    </button>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section id="testimonios" class="section testimonials">
+                <div class="container">
+                    <div class="section-title">
+                        <span>Testimonios</span>
+                        <h2>Lo que dicen nuestros clientes</h2>
+                        <p>Testimonios de negocios que han transformado sus operaciones.</p>
+                    </div>
+
+                    <div class="testimonials-grid">
+                        <article
+                            v-for="(testimonial, index) in testimonials"
+                            :key="testimonial.name"
+                            class="testimonial-card reveal"
+                            :class="`delay-${Math.min(index, 3)}`"
+                        >
+                            <div class="testimonial-content">
+                                <p>{{ testimonial.quote }}</p>
+                            </div>
+                            <div class="testimonial-author">
+                                <img :src="testimonial.image" :alt="testimonial.name" />
+                                <div class="author-info">
+                                    <h4>{{ testimonial.name }}</h4>
+                                    <p>{{ testimonial.role }}</p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contacto" class="section contact">
+                <div class="container">
+                    <div class="section-title">
+                        <span>Contáctanos</span>
+                        <h2>¿Listo para transformar tu negocio?</h2>
+                        <p>Contáctanos para una demostración personalizada.</p>
+                    </div>
+
+                    <div class="contact-form reveal">
+                        <form @submit.prevent="submit">
+                            <div class="form-group">
+                                <label for="name">Nombre</label>
+                                <input
+                                    id="name"
+                                    v-model="form.name"
+                                    type="text"
+                                    class="form-control"
+                                    autocomplete="name"
+                                    required
+                                />
+                                <p v-if="form.errors.name" class="form-error">{{ form.errors.name }}</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input
+                                    id="email"
+                                    v-model="form.email"
+                                    type="email"
+                                    class="form-control"
+                                    autocomplete="email"
+                                    required
+                                />
+                                <p v-if="form.errors.email" class="form-error">{{ form.errors.email }}</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone">Teléfono</label>
+                                <input
+                                    id="phone"
+                                    v-model="form.phone"
+                                    type="tel"
+                                    class="form-control"
+                                    autocomplete="tel"
+                                    required
+                                />
+                                <p v-if="form.errors.phone" class="form-error">{{ form.errors.phone }}</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="business-type">Tipo de Negocio</label>
+                                <select
+                                    id="business-type"
+                                    v-model="form.business_type"
+                                    class="form-control"
+                                    required
+                                >
+                                    <option value="">Seleccione...</option>
+                                    <option value="restaurante">Restaurante/Cafetería</option>
+                                    <option value="tienda">Tienda/Comercio</option>
+                                    <option value="farmacia">Farmacia</option>
+                                    <option value="ferreteria">Ferretería</option>
+                                    <option value="veterinaria">Clínica Veterinaria</option>
+                                    <option value="otro">Otro</option>
+                                </select>
+                                <p v-if="form.errors.business_type" class="form-error">
+                                    {{ form.errors.business_type }}
+                                </p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message">¿Qué desafíos enfrenta tu negocio?</label>
+                                <textarea
+                                    id="message"
+                                    v-model="form.message"
+                                    class="form-control"
+                                    required
+                                ></textarea>
+                                <p v-if="form.errors.message" class="form-error">
+                                    {{ form.errors.message }}
+                                </p>
+                            </div>
+
+                            <button type="submit" class="btn submit-button" :disabled="form.processing">
+                                {{ form.processing ? 'Enviando...' : 'Solicitar Demostración' }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="container">
+                <div class="social-links">
+                    <button type="button" aria-label="WhatsApp" @click="scrollToSection('#contacto')">
+                        <MessageCircle class="social-icon" />
+                    </button>
+                    <button type="button" aria-label="Facebook" @click="scrollToSection('#contacto')">
+                        <Facebook class="social-icon" />
+                    </button>
+                    <button type="button" aria-label="Instagram" @click="scrollToSection('#contacto')">
+                        <Instagram class="social-icon" />
+                    </button>
+                    <button type="button" aria-label="Email" @click="scrollToSection('#contacto')">
+                        <Mail class="social-icon" />
+                    </button>
+                </div>
+                <p>
+                    &copy; {{ new Date().getFullYear() }} Soluciones Tecnológicas para Negocios.
+                    Todos los derechos reservados.
+                </p>
+                <p class="footer-note">
+                    Sistemas especializados para restaurantes, comercios, farmacias, ferreterías y
+                    veterinarias.
+                </p>
             </div>
-        </div>
-    </section>
+        </footer>
+
+        <Toaster />
+    </div>
 </template>
+
+<style scoped>
+:global(html) {
+    scroll-behavior: smooth;
+}
+
+.landing-page {
+    --primary-color: #2563eb;
+    --primary-dark: #1e40af;
+    --secondary-color: #0ea5e9;
+    --dark-bg: #0f172a;
+    --card-bg: #ffffff;
+    --text-main: #334155;
+    --text-light: #64748b;
+    --light-bg: #f8fafc;
+    --restaurant-color: #f43f5e;
+    --retail-color: #10b981;
+    --pharmacy-color: #8b5cf6;
+    --hardware-color: #f59e0b;
+    --vet-color: #0d9488;
+
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: #ffffff;
+    color: var(--text-main);
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    line-height: 1.6;
+}
+
+.landing-page *,
+.landing-page *::before,
+.landing-page *::after {
+    box-sizing: border-box;
+}
+
+.landing-page h1,
+.landing-page h2,
+.landing-page h3,
+.landing-page h4,
+.landing-page h5,
+.landing-page h6 {
+    margin: 0;
+    color: var(--dark-bg);
+    font-family: Poppins, Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.landing-page p {
+    margin: 0;
+}
+
+.landing-page button {
+    font: inherit;
+}
+
+.container {
+    width: min(1280px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+header {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-bottom: 1px solid rgb(255 255 255 / 10%);
+    background-color: rgb(15 23 42 / 95%);
+    backdrop-filter: blur(10px);
+    transition:
+        padding 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+header.scrolled {
+    box-shadow: 0 4px 20px rgb(0 0 0 / 10%);
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 72px;
+}
+
+.logo-button {
+    border: 0;
+    background: transparent;
+    color: #ffffff;
+    cursor: pointer;
+    font-family: Poppins, Inter, ui-sans-serif, system-ui, sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+.logo-button span {
+    color: var(--secondary-color);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.nav-links button:not(.btn),
+.mobile-menu button:not(.btn) {
+    position: relative;
+    border: 0;
+    background: transparent;
+    color: #e2e8f0;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links button:not(.btn)::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--secondary-color);
+    transition: width 0.3s;
+}
+
+.nav-links button:not(.btn):hover::after {
+    width: 100%;
+}
+
+.nav-links button:not(.btn):hover,
+.mobile-menu button:not(.btn):hover {
+    color: var(--secondary-color);
+}
+
+.mobile-menu-button {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgb(255 255 255 / 12%);
+    border-radius: 8px;
+    background: rgb(255 255 255 / 5%);
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.mobile-menu {
+    display: none;
+    padding: 0 0 18px;
+}
+
+.icon,
+.badge-icon,
+.filter-icon,
+.inline-icon,
+.social-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.hero {
+    position: relative;
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    overflow: hidden;
+    padding: 140px 0 100px;
+    background-color: var(--dark-bg);
+    background-image:
+        radial-gradient(at 0% 0%, rgb(37 99 235 / 15%) 0, transparent 50%),
+        radial-gradient(at 100% 0%, rgb(14 165 233 / 15%) 0, transparent 50%);
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    background-image:
+        linear-gradient(rgb(255 255 255 / 3%) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(255 255 255 / 3%) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: linear-gradient(to bottom, rgb(0 0 0 / 100%) 60%, rgb(0 0 0 / 0%));
+}
+
+.hero-container {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 60px;
+    align-items: center;
+    width: min(1280px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+.hero-text {
+    text-align: left;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    padding: 8px 16px;
+    border: 1px solid rgb(37 99 235 / 20%);
+    border-radius: 999px;
+    background: rgb(37 99 235 / 10%);
+    color: #60a5fa;
+    font-size: 13px;
+    font-weight: 600;
+    backdrop-filter: blur(5px);
+}
+
+.hero-text h1 {
+    margin-bottom: 24px;
+    color: #ffffff;
+    font-size: 58px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.1;
+}
+
+.hero-text h1 span {
+    background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-text p {
+    max-width: 540px;
+    margin-bottom: 40px;
+    color: #94a3b8;
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.hero-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.btn,
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        background 0.3s ease,
+        border-color 0.3s ease;
+}
+
+.btn {
+    border: 0;
+    background: var(--primary-color);
+    box-shadow: 0 10px 25px -5px rgb(37 99 235 / 40%);
+    color: #ffffff;
+    padding: 16px 36px;
+}
+
+.btn:hover {
+    background: var(--primary-dark);
+    box-shadow: 0 15px 30px -5px rgb(37 99 235 / 50%);
+    transform: translateY(-4px);
+}
+
+.btn:disabled {
+    cursor: wait;
+    opacity: 0.65;
+    transform: none;
+}
+
+.btn-outline {
+    border: 2px solid rgb(255 255 255 / 10%);
+    background: transparent;
+    color: #ffffff;
+    padding: 14px 34px;
+}
+
+.btn-outline:hover {
+    border-color: var(--primary-color);
+    background: rgb(37 99 235 / 10%);
+    transform: translateY(-4px);
+}
+
+.btn-sm {
+    min-height: 38px;
+    padding: 10px 24px;
+    font-size: 14px;
+}
+
+.btn-restaurant {
+    background: var(--restaurant-color);
+    box-shadow: 0 4px 15px rgb(244 63 94 / 30%);
+}
+
+.btn-restaurant:hover {
+    background: #e11d48;
+}
+
+.btn-retail {
+    background: var(--retail-color);
+    box-shadow: 0 4px 15px rgb(16 185 129 / 30%);
+}
+
+.btn-retail:hover {
+    background: #059669;
+}
+
+.btn-pharmacy {
+    background: var(--pharmacy-color);
+    box-shadow: 0 4px 15px rgb(139 92 246 / 30%);
+}
+
+.btn-pharmacy:hover {
+    background: #7c3aed;
+}
+
+.btn-hardware {
+    background: var(--hardware-color);
+    box-shadow: 0 4px 15px rgb(245 158 11 / 30%);
+}
+
+.btn-hardware:hover {
+    background: #d97706;
+}
+
+.btn-vet {
+    background: var(--vet-color);
+    box-shadow: 0 4px 15px rgb(13 148 136 / 30%);
+}
+
+.btn-vet:hover {
+    background: #0f766e;
+}
+
+.hero-visual {
+    position: relative;
+    perspective: 1000px;
+}
+
+.visual-card {
+    position: relative;
+    border: 1px solid rgb(255 255 255 / 10%);
+    border-radius: 8px;
+    background: rgb(15 23 42 / 60%);
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 50%);
+    padding: 15px;
+    backdrop-filter: blur(10px);
+    transform: rotateY(-10deg) rotateX(5deg);
+    transition: transform 0.5s ease;
+}
+
+.visual-card:hover {
+    transform: rotateY(0deg) rotateX(0deg);
+}
+
+.visual-card img {
+    display: block;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%);
+}
+
+.floating-icon {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 10px 25px rgb(0 0 0 / 20%);
+    animation: float 6s ease-in-out infinite;
+}
+
+.floating-svg {
+    width: 28px;
+    height: 28px;
+}
+
+.icon-1 {
+    top: -30px;
+    right: -30px;
+    color: var(--restaurant-color);
+}
+
+.icon-2 {
+    bottom: 40px;
+    left: -40px;
+    color: var(--retail-color);
+    animation-delay: 2s;
+}
+
+.icon-3 {
+    top: 40%;
+    right: -50px;
+    color: var(--pharmacy-color);
+    animation-delay: 4s;
+}
+
+.hero-fade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to top, #ffffff, transparent);
+    pointer-events: none;
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.section {
+    position: relative;
+    padding: 120px 0;
+}
+
+.section-title {
+    max-width: 700px;
+    margin: 0 auto 80px;
+    text-align: center;
+}
+
+.section-title span {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.section-title h2 {
+    margin-bottom: 20px;
+    color: var(--dark-bg);
+    font-size: 42px;
+    font-weight: 700;
+}
+
+.section-title p {
+    color: var(--text-light);
+    font-size: 18px;
+}
+
+.business-solutions,
+.portfolio {
+    background: #ffffff;
+}
+
+.solutions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
+}
+
+.solution-card {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    align-items: flex-start;
+    border: 1px solid #f1f5f9;
+    border-radius: 8px;
+    background: #ffffff;
+    padding: 40px 30px;
+    transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease,
+        border-color 0.4s ease;
+}
+
+.solution-card:hover {
+    border-color: transparent;
+    box-shadow: 0 20px 40px rgb(0 0 0 / 8%);
+    transform: translateY(-10px);
+}
+
+.solution-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #cccccc;
+    transition: height 0.3s;
+}
+
+.solution-card:hover::before {
+    height: 6px;
+}
+
+.solution-card.restaurante::before {
+    background: var(--restaurant-color);
+}
+
+.solution-card.comercio::before {
+    background: var(--retail-color);
+}
+
+.solution-card.farmacia::before {
+    background: var(--pharmacy-color);
+}
+
+.solution-card.ferreteria::before {
+    background: var(--hardware-color);
+}
+
+.solution-card.veterinaria::before {
+    background: var(--vet-color);
+}
+
+.solution-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 70px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    transition: transform 0.3s;
+}
+
+.restaurante .solution-icon-wrapper {
+    background: rgb(244 63 94 / 10%);
+    color: var(--restaurant-color);
+}
+
+.comercio .solution-icon-wrapper {
+    background: rgb(16 185 129 / 10%);
+    color: var(--retail-color);
+}
+
+.farmacia .solution-icon-wrapper {
+    background: rgb(139 92 246 / 10%);
+    color: var(--pharmacy-color);
+}
+
+.ferreteria .solution-icon-wrapper {
+    background: rgb(245 158 11 / 10%);
+    color: var(--hardware-color);
+}
+
+.veterinaria .solution-icon-wrapper {
+    background: rgb(13 148 136 / 10%);
+    color: var(--vet-color);
+}
+
+.solution-card:hover .solution-icon-wrapper {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.card-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.solution-card h3 {
+    margin-bottom: 15px;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.solution-card p {
+    flex-grow: 1;
+    margin-bottom: 25px;
+    color: var(--text-light);
+    font-size: 15px;
+}
+
+.features,
+.contact {
+    background-color: var(--light-bg);
+}
+
+.features-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: flex-start;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 5%);
+    padding: 30px;
+    transition: transform 0.3s;
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    margin-right: 25px;
+    border-radius: 8px;
+    background: var(--primary-color);
+    box-shadow: 0 10px 15px -3px rgb(37 99 235 / 30%);
+    color: #ffffff;
+}
+
+.feature-svg {
+    width: 24px;
+    height: 24px;
+}
+
+.feature-text h3 {
+    margin-bottom: 10px;
+    color: var(--dark-bg);
+    font-size: 20px;
+}
+
+.feature-text p {
+    color: var(--text-light);
+    font-size: 15px;
+}
+
+.business-type-selector {
+    margin-bottom: 50px;
+}
+
+.business-type-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+.filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    background: #ffffff;
+    color: var(--text-light);
+    cursor: pointer;
+    font-weight: 600;
+    padding: 10px 25px;
+    transition:
+        transform 0.3s,
+        box-shadow 0.3s,
+        background 0.3s,
+        color 0.3s,
+        border-color 0.3s;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    box-shadow: 0 4px 12px rgb(37 99 235 / 20%);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.portfolio-item {
+    overflow: hidden;
+    border: 1px solid #f1f5f9;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%);
+    transition:
+        transform 0.3s,
+        box-shadow 0.3s;
+}
+
+.portfolio-item:hover {
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%);
+    transform: translateY(-8px);
+}
+
+.portfolio-img {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+}
+
+.portfolio-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.portfolio-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(0 0 0 / 70%), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.portfolio-item:hover .portfolio-img img {
+    transform: scale(1.1);
+}
+
+.portfolio-item:hover .portfolio-img::after {
+    opacity: 1;
+}
+
+.portfolio-category {
+    position: absolute;
+    z-index: 1;
+    top: 15px;
+    right: 15px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 5px 10px;
+    text-transform: uppercase;
+}
+
+.restaurant-badge,
+.retail-badge,
+.pharmacy-badge,
+.hardware-badge,
+.vet-badge {
+    color: #ffffff;
+}
+
+.restaurant-badge {
+    background: var(--restaurant-color);
+}
+
+.retail-badge {
+    background: var(--retail-color);
+}
+
+.pharmacy-badge {
+    background: var(--pharmacy-color);
+}
+
+.hardware-badge {
+    background: var(--hardware-color);
+}
+
+.vet-badge {
+    background: var(--vet-color);
+}
+
+.portfolio-info {
+    padding: 25px;
+}
+
+.portfolio-info h3 {
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.portfolio-info p {
+    margin-bottom: 15px;
+    color: #666666;
+}
+
+.portfolio-links {
+    display: flex;
+}
+
+.portfolio-links button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 0;
+    background: transparent;
+    color: var(--primary-color);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 0;
+    text-transform: uppercase;
+}
+
+.testimonials {
+    background: var(--dark-bg);
+    color: #ffffff;
+}
+
+.testimonials .section-title h2 {
+    color: #ffffff;
+}
+
+.testimonials .section-title p {
+    color: #94a3b8;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.testimonial-card {
+    position: relative;
+    border: 1px solid rgb(255 255 255 / 5%);
+    border-radius: 8px;
+    background: rgb(30 41 59 / 50%);
+    padding: 40px 30px;
+    backdrop-filter: blur(5px);
+}
+
+.testimonial-card::before {
+    content: '"';
+    position: absolute;
+    top: -20px;
+    left: 20px;
+    color: var(--primary-color);
+    font-family: Georgia, serif;
+    font-size: 120px;
+    line-height: 1;
+    opacity: 0.2;
+}
+
+.testimonial-content {
+    position: relative;
+    margin-bottom: 20px;
+    color: #e2e8f0;
+    font-style: italic;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+}
+
+.testimonial-author img {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+    border-radius: 999px;
+    object-fit: cover;
+}
+
+.author-info h4 {
+    margin-bottom: 5px;
+    color: #ffffff;
+}
+
+.author-info p {
+    color: var(--secondary-color);
+    font-size: 13px;
+}
+
+.contact-form {
+    max-width: 700px;
+    margin: 0 auto;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 20px 40px rgb(0 0 0 / 5%);
+    padding: 40px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--dark-bg);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-control {
+    width: 100%;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: var(--dark-bg);
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    padding: 12px 15px;
+    transition:
+        border-color 0.3s,
+        background 0.3s;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    background: #ffffff;
+    outline: none;
+}
+
+textarea.form-control {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.form-error {
+    margin-top: 6px;
+    color: #dc2626;
+    font-size: 13px;
+}
+
+.submit-button {
+    width: 100%;
+}
+
+footer {
+    border-top: 1px solid rgb(255 255 255 / 10%);
+    background: var(--dark-bg);
+    color: #ffffff;
+    padding: 60px 0 30px;
+    text-align: center;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.social-links button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    border: 0;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 5%);
+    color: #ffffff;
+    cursor: pointer;
+    transition:
+        transform 0.3s,
+        background 0.3s;
+}
+
+.social-links button:hover {
+    background: var(--primary-color);
+    transform: translateY(-5px);
+}
+
+.footer-note {
+    margin-top: 10px;
+    font-size: 14px;
+    opacity: 0.6;
+}
+
+.reveal {
+    animation: fadeUp 0.75s ease both;
+}
+
+.delay-1 {
+    animation-delay: 0.12s;
+}
+
+.delay-2 {
+    animation-delay: 0.24s;
+}
+
+.delay-3 {
+    animation-delay: 0.36s;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .landing-page *,
+    .landing-page *::before,
+    .landing-page *::after {
+        scroll-behavior: auto;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+
+@media (max-width: 900px) {
+    .nav-links {
+        display: none;
+    }
+
+    .mobile-menu-button {
+        display: flex;
+    }
+
+    .mobile-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .mobile-menu button {
+        width: 100%;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    .hero-container {
+        grid-template-columns: 1fr;
+        gap: 50px;
+        text-align: center;
+    }
+
+    .hero-text {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .hero-text h1 {
+        font-size: 42px;
+    }
+
+    .hero-btns {
+        justify-content: center;
+    }
+
+    .visual-card,
+    .visual-card:hover {
+        transform: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .container,
+    .hero-container {
+        width: min(100% - 32px, 1280px);
+    }
+
+    .section {
+        padding: 84px 0;
+    }
+
+    .section-title {
+        margin-bottom: 52px;
+    }
+
+    .section-title h2 {
+        font-size: 32px;
+    }
+
+    .section-title p,
+    .hero-text p {
+        font-size: 16px;
+    }
+
+    .hero {
+        padding-top: 120px;
+    }
+
+    .hero-text h1 {
+        font-size: 38px;
+    }
+
+    .hero-btns,
+    .hero-btns .btn,
+    .hero-btns .btn-outline {
+        width: 100%;
+    }
+
+    .floating-icon {
+        width: 45px;
+        height: 45px;
+    }
+
+    .floating-svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .icon-1 {
+        right: 0;
+    }
+
+    .icon-2 {
+        left: 0;
+    }
+
+    .icon-3 {
+        right: -10px;
+    }
+
+    .features-list,
+    .portfolio-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .feature-item {
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .feature-icon {
+        margin-right: 0;
+    }
+
+    .contact-form {
+        padding: 26px;
+    }
+}
+</style>

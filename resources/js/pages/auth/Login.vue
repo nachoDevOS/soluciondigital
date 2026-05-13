@@ -8,7 +8,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 
@@ -22,7 +21,6 @@ defineOptions({
 defineProps<{
     status?: string;
     canResetPassword: boolean;
-    canRegister: boolean;
 }>();
 </script>
 
@@ -95,11 +93,6 @@ defineProps<{
                 <Spinner v-if="processing" />
                 Iniciar sesión
             </Button>
-        </div>
-
-        <div v-if="canRegister" class="text-center text-sm text-muted-foreground">
-            ¿No tienes una cuenta?
-            <TextLink :href="register()" :tabindex="5">Regístrate</TextLink>
         </div>
     </Form>
 </template>

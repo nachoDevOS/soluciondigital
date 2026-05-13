@@ -3,6 +3,8 @@ import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import type { BreadcrumbItem } from '@/types';
 
+// Header superior del admin cuando usamos sidebar.
+// No es la sidebar: es la barra horizontal donde van el boton de menu y breadcrumbs.
 withDefaults(
     defineProps<{
         breadcrumbs?: BreadcrumbItem[];
@@ -14,6 +16,7 @@ withDefaults(
 </script>
 
 <template>
+    <!-- Top bar del admin: boton para abrir/cerrar sidebar + migas de pan. -->
     <header
         class="flex h-16 shrink-0 items-center gap-2 border-b border-sidebar-border/70 px-6 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-4"
     >

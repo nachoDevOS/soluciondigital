@@ -144,7 +144,7 @@ return [
     */
 
     'features' => [
-        Features::registration(),
+        // Registro publico desactivado: los usuarios se crean desde admin/seeders.
         Features::resetPasswords(),
         Features::emailVerification(),
         Features::twoFactorAuthentication([

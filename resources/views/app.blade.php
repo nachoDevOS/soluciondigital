@@ -16,6 +16,14 @@
                         document.documentElement.classList.add('dark');
                     }
                 }
+
+                @if (($page['component'] ?? null) === 'Welcome')
+                    document.documentElement.classList.add('app-loading');
+                    window.setTimeout(function() {
+                        document.documentElement.classList.add('app-ready');
+                        document.documentElement.classList.remove('app-loading');
+                    }, 3000);
+                @endif
             })();
         </script>
 
@@ -27,6 +35,20 @@
 
             html.dark {
                 background-color: oklch(0.145 0 0);
+            }
+
+            html.app-loading:not(.app-ready),
+            html.app-loading:not(.app-ready) body {
+                background-color: #0f172a;
+            }
+
+            html.app-loading:not(.app-ready) #app {
+                opacity: 0;
+            }
+
+            html.app-ready #app {
+                opacity: 1;
+                transition: opacity 120ms ease;
             }
         </style>
 
