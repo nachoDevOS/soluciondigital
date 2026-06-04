@@ -1,26 +1,34 @@
 <script setup lang="ts">
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import {
+    ArrowRight,
+    Bot,
     Boxes,
+    BrainCircuit,
+    CalendarCheck,
     ChartLine,
     ChartPie,
+    CheckCircle2,
+    Cloud,
+    Code2,
     Clock,
-    Database,
     Facebook,
-    Gauge,
     Images,
     Instagram,
+    Layers,
     Mail,
     Menu,
     MessageCircle,
+    MessageSquareText,
     MonitorSmartphone,
     PawPrint,
     Pill,
     ReceiptText,
     Rocket,
+    ServerCog,
     ShieldCheck,
-    Sparkles,
     ShoppingCart,
+    Smartphone,
     Store,
     Utensils,
     Wrench,
@@ -62,13 +70,17 @@ const loginForm = useForm({
     remember: false,
 });
 
+const whatsappUrl =
+    'https://wa.me/59177149775?text=Hola%20Soluci%C3%B3n%20Digital%2C%20quiero%20informaci%C3%B3n%20sobre%20sus%20sistemas%20SaaS%20y%20chatbot.';
+
 // Links del menu superior de la landing.
 const navLinks = [
     { label: 'Inicio', href: '#inicio' },
     { label: 'Soluciones', href: '#soluciones' },
+    { label: 'SaaS', href: '#saas' },
     { label: 'Casos de Éxito', href: '#portafolio' },
     { label: 'Beneficios', href: '#beneficios' },
-    { label: 'Testimonios', href: '#testimonios' },
+    { label: 'Planes', href: '#planes' },
 ];
 
 // Tarjetas de "Soluciones". Si quieres agregar otro tipo de negocio, empieza aqui.
@@ -119,6 +131,22 @@ const solutions: Array<{
         icon: PawPrint,
         buttonClass: 'btn-vet',
     },
+    {
+        key: 'saas',
+        title: 'Distribuidor SaaS',
+        description:
+            'Alquila sistemas por rubro, administra clientes, usuarios, pagos, módulos y soporte desde una base escalable.',
+        icon: Cloud,
+        buttonClass: 'btn-saas',
+    },
+    {
+        key: 'chatbot',
+        title: 'Chatbot y Automatización',
+        description:
+            'Bots para WhatsApp y web que responden consultas, capturan leads, agendan citas y conectan con tu sistema.',
+        icon: Bot,
+        buttonClass: 'btn-chatbot',
+    },
 ];
 
 // Beneficios que se muestran en la seccion "Por que elegirnos".
@@ -150,26 +178,97 @@ const features = [
 ];
 
 const heroStats = [
-    { value: '+40%', label: 'más eficiencia' },
-    { value: '24/7', label: 'acceso seguro' },
-    { value: '5+', label: 'rubros listos' },
+    { value: 'SaaS', label: 'alquiler mensual' },
+    { value: 'Bot', label: 'ventas y soporte' },
+    { value: '24/7', label: 'negocio conectado' },
+];
+
+const techBadges = [
+    { label: 'IA para respuestas', icon: BrainCircuit },
+    { label: 'Web y móvil', icon: Smartphone },
+    { label: 'Desarrollo a medida', icon: Code2 },
 ];
 
 const workflowSteps = [
     {
-        title: 'Diagnóstico',
-        description: 'Revisamos ventas, inventario, facturación y tareas manuales.',
-        icon: Sparkles,
+        title: 'Demo guiada',
+        description: 'Ves el flujo real de tu negocio antes de decidir.',
+        icon: MonitorSmartphone,
     },
     {
-        title: 'Implementación',
-        description: 'Configuramos módulos, usuarios, productos y reportes clave.',
-        icon: Database,
+        title: 'Sistema listo',
+        description: 'Configuramos usuarios, productos, permisos, reportes y bot.',
+        icon: ServerCog,
     },
     {
-        title: 'Crecimiento',
-        description: 'Medimos resultados y ajustamos el sistema según tu operación.',
-        icon: Gauge,
+        title: 'Soporte continuo',
+        description: 'Tu equipo recibe acompanamiento y mejoras sin frenar ventas.',
+        icon: MessageSquareText,
+    },
+];
+
+const impactStats = [
+    { value: '15 min', label: 'diagnostico inicial' },
+    { value: '+5 rubros', label: 'plantillas listas' },
+    { value: '1 solo panel', label: 'ventas, stock y clientes' },
+    { value: 'WhatsApp', label: 'contacto directo' },
+];
+
+const servicePillars = [
+    {
+        eyebrow: 'Alquiler de sistema',
+        title: 'Tu software funcionando sin comprar servidores',
+        description:
+            'Modelo SaaS para pagar por uso, activar módulos por cliente y crecer sin hacer una inversión pesada desde el primer día.',
+        icon: Cloud,
+        points: ['Usuarios y permisos', 'Backups y seguridad', 'Actualizaciones incluidas'],
+    },
+    {
+        eyebrow: 'Distribuidor SaaS',
+        title: 'Convierte el sistema en una línea de negocio',
+        description:
+            'Ideal para distribuidores que quieren vender soluciones por rubro con control de clientes, planes, soporte y renovaciones.',
+        icon: Layers,
+        points: ['Planes por rubro', 'Gestión de clientes', 'Ingresos recurrentes'],
+    },
+    {
+        eyebrow: 'Chatbot inteligente',
+        title: 'Atiende clientes incluso cuando estás ocupado',
+        description:
+            'Automatiza respuestas, cotizaciones, reservas, recordatorios y consultas frecuentes desde WhatsApp o tu sitio web.',
+        icon: Bot,
+        points: ['Leads automáticos', 'Agenda y recordatorios', 'Integración con sistema'],
+    },
+];
+
+const liveModules = [
+    { label: 'Punto de venta', value: 'Online', icon: ShoppingCart },
+    { label: 'Inventario', value: '1.248 items', icon: Boxes },
+    { label: 'Facturación', value: 'Lista', icon: ReceiptText },
+    { label: 'Chatbot', value: '32 leads', icon: Bot },
+    { label: 'Agenda', value: '18 citas', icon: CalendarCheck },
+    { label: 'Reportes', value: '+27%', icon: ChartLine },
+];
+
+const plans = [
+    {
+        name: 'Emprende',
+        price: 'Desde Bs 199',
+        description: 'Para negocios que necesitan vender, controlar stock y ordenar su día.',
+        features: ['Punto de venta', 'Inventario', 'Usuarios básicos', 'Soporte remoto'],
+    },
+    {
+        name: 'Crecimiento',
+        price: 'Desde Bs 349',
+        description: 'Para empresas que quieren reportes, automatizaciones y más control.',
+        features: ['Todo Emprende', 'Reportes gerenciales', 'Facturación', 'Chatbot inicial'],
+        highlighted: true,
+    },
+    {
+        name: 'Distribuidor',
+        price: 'A medida',
+        description: 'Para vender sistemas SaaS a varios clientes con una operación escalable.',
+        features: ['Multi cliente', 'Planes y renovaciones', 'Marca adaptable', 'Soporte prioritario'],
     },
 ];
 
@@ -367,10 +466,10 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <Head title="Soluciones Tecnológicas para Negocios">
+    <Head title="Solución Digital | Sistemas SaaS, chatbot y software a medida">
         <meta
             name="description"
-            content="Sistemas personalizados para restaurantes, ventas, farmacias, ferreterías, veterinarias y más. Automatiza y optimiza tu negocio con soluciones tecnológicas a medida."
+            content="Solución Digital crea y alquila sistemas SaaS, punto de venta, inventario, facturación, chatbot, automatizaciones y software a medida para negocios."
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
@@ -386,7 +485,8 @@ onBeforeUnmount(() => {
             <div class="container">
                 <nav aria-label="Navegación principal">
                     <button type="button" class="logo-button" @click="scrollToSection('#inicio')">
-                        Solución <span>Digital</span>
+                        <span class="brand-mark" aria-hidden="true">SD</span>
+                        <span class="brand-name">Solución <span>Digital</span></span>
                     </button>
 
                     <ul class="nav-links">
@@ -447,24 +547,32 @@ onBeforeUnmount(() => {
                     <div class="hero-text reveal">
                         <div class="hero-badge">
                             <Rocket class="badge-icon" />
-                            Potencia tu crecimiento
+                            Solución Digital | Sistemas SaaS + Chatbot
                         </div>
                         <h1>
-                            Software Inteligente para
+                            Alquila software que vende,
                             <br />
-                            <span>Tu Negocio</span>
+                            controla y atiende por ti
                         </h1>
                         <p>
-                            Deja atrás las hojas de cálculo y el desorden. Automatiza inventarios,
-                            ventas y facturación con una plataforma diseñada para escalar contigo.
+                            Creamos y alquilamos sistemas para negocios: punto de venta,
+                            inventario, facturación, reportes, distribuidores SaaS, chatbot para
+                            WhatsApp y automatizaciones conectadas a tu operación.
                         </p>
+                        <div class="hero-tech-row" aria-label="Capacidades principales">
+                            <span v-for="badge in techBadges" :key="badge.label" class="hero-tech-badge">
+                                <component :is="badge.icon" class="hero-tech-icon" />
+                                {{ badge.label }}
+                            </span>
+                        </div>
                         <div class="hero-btns">
                             <button type="button" class="btn" @click="scrollToSection('#contacto')">
-                                Solicitar Demo
+                                Quiero una demo
                                 <Rocket class="btn-icon" />
                             </button>
-                            <button type="button" class="btn-outline" @click="scrollToSection('#soluciones')">
-                                Ver Soluciones
+                            <button type="button" class="btn-outline" @click="scrollToSection('#saas')">
+                                Ver SaaS y bot
+                                <ArrowRight class="btn-icon" />
                             </button>
                         </div>
                         <div class="hero-stats" aria-label="Resultados principales">
@@ -497,9 +605,9 @@ onBeforeUnmount(() => {
                                     <div class="preview-panel wide">
                                         <div class="preview-label">
                                             <ReceiptText class="preview-icon" />
-                                            Ventas de hoy
+                                            SaaS activo
                                         </div>
-                                        <strong>Bs 8.420</strong>
+                                        <strong>27 clientes</strong>
                                         <div class="preview-bars">
                                             <span></span>
                                             <span></span>
@@ -509,10 +617,10 @@ onBeforeUnmount(() => {
                                     </div>
                                     <div class="preview-panel">
                                         <div class="preview-label">
-                                            <Gauge class="preview-icon" />
-                                            Stock
+                                            <Bot class="preview-icon" />
+                                            Chatbot
                                         </div>
-                                        <strong>92%</strong>
+                                        <strong>Online</strong>
                                     </div>
                                     <div class="preview-panel">
                                         <div class="preview-label">
@@ -522,6 +630,12 @@ onBeforeUnmount(() => {
                                         <strong>Activo</strong>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="hero-module-cloud">
+                                <span v-for="module in liveModules.slice(0, 4)" :key="module.label">
+                                    <component :is="module.icon" class="module-cloud-icon" />
+                                    {{ module.label }}
+                                </span>
                             </div>
                             <div class="floating-icon icon-1">
                                 <ChartPie class="floating-svg" />
@@ -554,6 +668,93 @@ onBeforeUnmount(() => {
                             <p>{{ step.description }}</p>
                         </div>
                     </article>
+                </div>
+            </section>
+
+            <section class="impact-band" aria-label="Diagnóstico rápido por WhatsApp">
+                <div class="container impact-panel reveal">
+                    <div class="impact-copy">
+                        <span>Diagnóstico gratis</span>
+                        <h2>Cuéntanos tu negocio y te decimos qué sistema necesitas</h2>
+                        <p>
+                            En pocos minutos revisamos tu rubro, procesos y puntos de dolor para
+                            proponerte un sistema SaaS, chatbot o desarrollo a medida.
+                        </p>
+                    </div>
+
+                    <div class="impact-stats" aria-label="Ventajas del diagnóstico">
+                        <div v-for="stat in impactStats" :key="stat.label" class="impact-stat">
+                            <strong>{{ stat.value }}</strong>
+                            <span>{{ stat.label }}</span>
+                        </div>
+                    </div>
+
+                    <a
+                        class="impact-whatsapp"
+                        :href="whatsappUrl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <MessageCircle class="impact-whatsapp-icon" />
+                        Hablar ahora
+                    </a>
+                </div>
+            </section>
+
+            <section id="saas" class="section saas-showcase">
+                <div class="container">
+                    <div class="section-title">
+                        <span>SaaS, chatbot y desarrollo</span>
+                        <h2>Una plataforma pensada para vender más y operar mejor</h2>
+                        <p>
+                            No solo hacemos páginas. Construimos sistemas que trabajan contigo:
+                            cobran, responden, reportan, ordenan y escalan.
+                        </p>
+                    </div>
+
+                    <div class="service-pillar-grid">
+                        <article
+                            v-for="(pillar, index) in servicePillars"
+                            :key="pillar.title"
+                            class="service-pillar reveal"
+                            :class="`delay-${Math.min(index, 3)}`"
+                        >
+                            <div class="pillar-topline">
+                                <div class="pillar-icon">
+                                    <component :is="pillar.icon" class="pillar-svg" />
+                                </div>
+                                <span>{{ pillar.eyebrow }}</span>
+                            </div>
+                            <h3>{{ pillar.title }}</h3>
+                            <p>{{ pillar.description }}</p>
+                            <ul>
+                                <li v-for="point in pillar.points" :key="point">
+                                    <CheckCircle2 class="check-icon" />
+                                    {{ point }}
+                                </li>
+                            </ul>
+                        </article>
+                    </div>
+
+                    <div class="operations-panel reveal delay-1">
+                        <div class="operations-copy">
+                            <span>Centro de control</span>
+                            <h3>Todo tu negocio en una sola pantalla</h3>
+                            <p>
+                                Tu equipo ve ventas, stock, clientes, pagos, citas y conversaciones
+                                sin saltar entre herramientas. Menos caos, más decisiones rápidas.
+                            </p>
+                        </div>
+                        <div class="live-module-grid" aria-label="Módulos disponibles">
+                            <article v-for="module in liveModules" :key="module.label" class="live-module">
+                                <component :is="module.icon" class="live-module-icon" />
+                                <div>
+                                    <strong>{{ module.value }}</strong>
+                                    <span>{{ module.label }}</span>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -701,6 +902,43 @@ onBeforeUnmount(() => {
                 </div>
             </section>
 
+            <section id="planes" class="section pricing">
+                <div class="container">
+                    <div class="section-title">
+                        <span>Planes flexibles</span>
+                        <h2>Empieza pequeño, escala cuando vendas más</h2>
+                        <p>
+                            Elige un plan base y lo adaptamos a tu rubro, equipo y forma de trabajo.
+                        </p>
+                    </div>
+
+                    <div class="pricing-grid">
+                        <article
+                            v-for="(plan, index) in plans"
+                            :key="plan.name"
+                            class="pricing-card reveal"
+                            :class="[{ highlighted: plan.highlighted }, `delay-${Math.min(index, 3)}`]"
+                        >
+                            <div class="pricing-header">
+                                <span v-if="plan.highlighted" class="popular-badge">Más pedido</span>
+                                <h3>{{ plan.name }}</h3>
+                                <strong>{{ plan.price }}</strong>
+                                <p>{{ plan.description }}</p>
+                            </div>
+                            <ul>
+                                <li v-for="feature in plan.features" :key="feature">
+                                    <CheckCircle2 class="check-icon" />
+                                    {{ feature }}
+                                </li>
+                            </ul>
+                            <button type="button" class="btn btn-sm" @click="scrollToSection('#contacto')">
+                                Cotizar ahora
+                            </button>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
             <section id="contacto" class="section contact">
                 <div class="container">
                     <div class="section-title">
@@ -764,6 +1002,8 @@ onBeforeUnmount(() => {
                                     <option value="farmacia">Farmacia</option>
                                     <option value="ferreteria">Ferretería</option>
                                     <option value="veterinaria">Clínica Veterinaria</option>
+                                    <option value="saas">Distribuidor SaaS</option>
+                                    <option value="chatbot">Chatbot / Automatización</option>
                                     <option value="otro">Otro</option>
                                 </select>
                                 <p v-if="form.errors.business_type" class="form-error">
@@ -810,12 +1050,11 @@ onBeforeUnmount(() => {
                     </button>
                 </div>
                 <p>
-                    &copy; {{ new Date().getFullYear() }} Soluciones Tecnológicas para Negocios.
+                    &copy; {{ new Date().getFullYear() }} Solución Digital.
                     Todos los derechos reservados.
                 </p>
                 <p class="footer-note">
-                    Sistemas especializados para restaurantes, comercios, farmacias, ferreterías y
-                    veterinarias.
+                    Alquiler de sistemas SaaS, distribuidores, chatbot y software a medida para negocios.
                 </p>
             </div>
         </footer>
@@ -904,6 +1143,17 @@ onBeforeUnmount(() => {
             </section>
         </div>
 
+        <a
+            class="whatsapp-float"
+            :href="whatsappUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Contactar por WhatsApp al +591 77149775"
+        >
+            <MessageCircle class="whatsapp-float-icon" />
+            <span>WhatsApp</span>
+        </a>
+
         <Toaster />
     </div>
 </template>
@@ -927,6 +1177,8 @@ onBeforeUnmount(() => {
     --pharmacy-color: #8b5cf6;
     --hardware-color: #f59e0b;
     --vet-color: #0d9488;
+    --saas-color: #2563eb;
+    --chatbot-color: #06b6d4;
 
     min-height: 100vh;
     overflow-x: hidden;
@@ -955,10 +1207,15 @@ onBeforeUnmount(() => {
 
 .landing-page p {
     margin: 0;
+    overflow-wrap: anywhere;
 }
 
 .landing-page button {
     font: inherit;
+}
+
+.landing-page img {
+    max-width: 100%;
 }
 
 .container {
@@ -999,22 +1256,58 @@ nav {
     align-items: center;
     justify-content: space-between;
     gap: 24px;
-    min-height: 72px;
+    min-height: 86px;
 }
 
 .logo-button {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 12px;
     border: 0;
     background: transparent;
     color: #ffffff;
     cursor: pointer;
     font-family: Poppins, Inter, ui-sans-serif, system-ui, sans-serif;
-    font-size: 26px;
-    font-weight: 700;
+    font-size: 38px;
+    font-weight: 800;
     letter-spacing: 0;
 }
 
-.logo-button span {
+.brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgb(56 189 248 / 35%);
+    border-radius: 8px;
+    background:
+        linear-gradient(135deg, rgb(14 165 233 / 95%), rgb(37 99 235 / 95%)),
+        #0ea5e9;
+    box-shadow:
+        0 10px 24px rgb(14 165 233 / 24%),
+        inset 0 1px 0 rgb(255 255 255 / 28%);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+}
+
+.brand-name {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 7px;
+    color: #ffffff;
+    font-size: 29px;
+    font-weight: 900;
+    line-height: 1;
+    text-shadow: 0 8px 24px rgb(14 165 233 / 16%);
+}
+
+.brand-name span {
     color: var(--secondary-color);
+    text-shadow: 0 0 18px rgb(14 165 233 / 42%);
 }
 
 .nav-links {
@@ -1057,14 +1350,14 @@ nav {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 38px;
+    min-height: 30px;
     border: 1px solid rgb(255 255 255 / 18%);
     border-radius: 999px;
     background: rgb(255 255 255 / 8%);
     color: #ffffff;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 700;
-    padding: 9px 20px;
+    padding: 6px 13px;
     text-decoration: none;
     transition:
         transform 0.3s ease,
@@ -1153,7 +1446,7 @@ nav {
     min-height: 100vh;
     align-items: center;
     overflow: hidden;
-    padding: 140px 0 100px;
+    padding: 112px 0 78px;
     background-color: var(--dark-bg);
     background-image:
         radial-gradient(at 0% 0%, rgb(37 99 235 / 15%) 0, transparent 50%),
@@ -1172,12 +1465,27 @@ nav {
     mask-image: linear-gradient(to bottom, rgb(0 0 0 / 100%) 60%, rgb(0 0 0 / 0%));
 }
 
+.hero::after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: -22%;
+    width: 36%;
+    height: 100%;
+    background: linear-gradient(105deg, transparent, rgb(56 189 248 / 10%), transparent);
+    filter: blur(2px);
+    transform: skewX(-16deg);
+    animation: heroSweep 8s ease-in-out infinite;
+    pointer-events: none;
+}
+
 .hero-container {
     position: relative;
     z-index: 1;
     display: grid;
     grid-template-columns: 1.2fr 1fr;
-    gap: 60px;
+    gap: 48px;
     align-items: center;
     width: min(1280px, calc(100% - 48px));
     margin: 0 auto;
@@ -1191,6 +1499,7 @@ nav {
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    max-width: 100%;
     margin-bottom: 24px;
     padding: 8px 16px;
     border: 1px solid rgb(37 99 235 / 20%);
@@ -1199,13 +1508,14 @@ nav {
     color: #60a5fa;
     font-size: 13px;
     font-weight: 600;
+    line-height: 1.35;
     backdrop-filter: blur(5px);
 }
 
 .hero-text h1 {
     margin-bottom: 24px;
     color: #ffffff;
-    font-size: 58px;
+    font-size: 52px;
     font-weight: 800;
     letter-spacing: 0;
     line-height: 1.1;
@@ -1219,10 +1529,38 @@ nav {
 
 .hero-text p {
     max-width: 540px;
-    margin-bottom: 40px;
+    margin-bottom: 24px;
     color: #94a3b8;
     font-size: 18px;
     line-height: 1.7;
+}
+
+.hero-tech-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 34px;
+}
+
+.hero-tech-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgb(255 255 255 / 12%);
+    border-radius: 999px;
+    background: rgb(255 255 255 / 7%);
+    color: #dbeafe;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.3;
+    padding: 9px 13px;
+    backdrop-filter: blur(12px);
+}
+
+.hero-tech-icon {
+    width: 16px;
+    height: 16px;
+    color: #67e8f9;
 }
 
 .hero-btns {
@@ -1268,10 +1606,10 @@ nav {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 48px;
+    min-height: 42px;
     border-radius: 999px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     text-decoration: none;
     transition:
@@ -1286,7 +1624,7 @@ nav {
     background: var(--primary-color);
     box-shadow: 0 10px 25px -5px rgb(37 99 235 / 40%);
     color: #ffffff;
-    padding: 16px 36px;
+    padding: 12px 28px;
 }
 
 .btn:hover {
@@ -1305,7 +1643,7 @@ nav {
     border: 2px solid rgb(255 255 255 / 10%);
     background: transparent;
     color: #ffffff;
-    padding: 14px 34px;
+    padding: 10px 26px;
 }
 
 .btn-outline:hover {
@@ -1315,9 +1653,9 @@ nav {
 }
 
 .btn-sm {
-    min-height: 38px;
-    padding: 10px 24px;
-    font-size: 14px;
+    min-height: 30px;
+    padding: 6px 14px;
+    font-size: 12px;
 }
 
 .btn-restaurant {
@@ -1365,6 +1703,24 @@ nav {
     background: #0f766e;
 }
 
+.btn-saas {
+    background: var(--saas-color);
+    box-shadow: 0 4px 15px rgb(37 99 235 / 30%);
+}
+
+.btn-saas:hover {
+    background: #1d4ed8;
+}
+
+.btn-chatbot {
+    background: var(--chatbot-color);
+    box-shadow: 0 4px 15px rgb(6 182 212 / 30%);
+}
+
+.btn-chatbot:hover {
+    background: #0891b2;
+}
+
 .hero-visual {
     position: relative;
     perspective: 1000px;
@@ -1401,7 +1757,7 @@ nav {
 .dashboard-preview {
     position: absolute;
     right: 34px;
-    bottom: 34px;
+    bottom: 74px;
     width: min(76%, 380px);
     border: 1px solid rgb(255 255 255 / 18%);
     border-radius: 8px;
@@ -1410,6 +1766,50 @@ nav {
     color: #ffffff;
     overflow: hidden;
     backdrop-filter: blur(18px);
+}
+
+.hero-module-cloud {
+    position: absolute;
+    right: 28px;
+    bottom: 22px;
+    left: 28px;
+    z-index: 3;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.hero-module-cloud span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgb(255 255 255 / 14%);
+    border-radius: 999px;
+    background: rgb(2 6 23 / 74%);
+    color: #e0f2fe;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 8px 11px;
+    backdrop-filter: blur(14px);
+    animation: softBlink 3.2s ease-in-out infinite;
+}
+
+.hero-module-cloud span:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.hero-module-cloud span:nth-child(3) {
+    animation-delay: 0.8s;
+}
+
+.hero-module-cloud span:nth-child(4) {
+    animation-delay: 1.2s;
+}
+
+.module-cloud-icon {
+    width: 14px;
+    height: 14px;
+    color: #22c55e;
 }
 
 .preview-header {
@@ -1583,6 +1983,37 @@ nav {
     }
 }
 
+@keyframes softBlink {
+    0%,
+    100% {
+        border-color: rgb(255 255 255 / 14%);
+        transform: translateY(0);
+    }
+
+    50% {
+        border-color: rgb(34 197 94 / 44%);
+        transform: translateY(-3px);
+    }
+}
+
+@keyframes heroSweep {
+    0%,
+    18% {
+        transform: translateX(0) skewX(-16deg);
+        opacity: 0;
+    }
+
+    36% {
+        opacity: 1;
+    }
+
+    54%,
+    100% {
+        transform: translateX(360%) skewX(-16deg);
+        opacity: 0;
+    }
+}
+
 .proof-strip {
     position: relative;
     z-index: 2;
@@ -1633,6 +2064,316 @@ nav {
     color: var(--text-light);
     font-size: 14px;
     line-height: 1.55;
+}
+
+.impact-band {
+    position: relative;
+    z-index: 1;
+    padding: 42px 0 0;
+    background: #ffffff;
+}
+
+.impact-panel {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1.15fr auto;
+    gap: 26px;
+    align-items: center;
+    overflow: hidden;
+    border: 1px solid rgb(37 99 235 / 14%);
+    border-radius: 8px;
+    background:
+        linear-gradient(135deg, rgb(15 23 42 / 96%), rgb(30 41 59 / 96%)),
+        #0f172a;
+    box-shadow: 0 28px 80px rgb(15 23 42 / 16%);
+    padding: 28px;
+}
+
+.impact-panel::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    right: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #38bdf8, #22c55e, #a855f7, #38bdf8);
+    background-size: 220% 100%;
+    animation: gradientShift 5s linear infinite;
+}
+
+.impact-copy {
+    position: relative;
+}
+
+.impact-copy span {
+    color: #67e8f9;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+}
+
+.impact-copy h2 {
+    margin-top: 8px;
+    color: #ffffff;
+    font-size: 28px;
+    line-height: 1.18;
+}
+
+.impact-copy p {
+    margin-top: 12px;
+    color: #cbd5e1;
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+.impact-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.impact-stat {
+    border: 1px solid rgb(255 255 255 / 10%);
+    border-radius: 8px;
+    background: rgb(255 255 255 / 7%);
+    padding: 14px;
+}
+
+.impact-stat strong {
+    display: block;
+    color: #ffffff;
+    font-family: Poppins, Inter, ui-sans-serif, system-ui, sans-serif;
+    font-size: 18px;
+    line-height: 1.05;
+}
+
+.impact-stat span {
+    display: block;
+    margin-top: 5px;
+    color: #bfdbfe;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.impact-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    white-space: nowrap;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #25d366, #128c7e);
+    box-shadow: 0 14px 30px rgb(18 140 126 / 28%);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 900;
+    padding: 10px 18px;
+    text-decoration: none;
+    transition:
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+}
+
+.impact-whatsapp:hover {
+    box-shadow: 0 18px 38px rgb(18 140 126 / 38%);
+    transform: translateY(-2px);
+}
+
+.impact-whatsapp-icon {
+    width: 18px;
+    height: 18px;
+}
+
+@keyframes gradientShift {
+    to {
+        background-position: 220% 0;
+    }
+}
+
+.saas-showcase {
+    overflow: hidden;
+    background:
+        linear-gradient(180deg, #ffffff 0%, #f8fafc 100%),
+        radial-gradient(circle at 15% 15%, rgb(14 165 233 / 10%), transparent 34%);
+}
+
+.service-pillar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.service-pillar {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 16px 40px rgb(15 23 42 / 6%);
+    padding: 30px;
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        transform 0.3s ease;
+}
+
+.service-pillar::after {
+    content: '';
+    position: absolute;
+    right: -42px;
+    bottom: -42px;
+    width: 120px;
+    height: 120px;
+    border: 1px solid rgb(37 99 235 / 12%);
+    border-radius: 999px;
+}
+
+.service-pillar:hover {
+    border-color: rgb(37 99 235 / 28%);
+    box-shadow: 0 24px 60px rgb(15 23 42 / 10%);
+    transform: translateY(-8px);
+}
+
+.pillar-topline {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.pillar-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: #eff6ff;
+    color: var(--primary-color);
+}
+
+.pillar-svg {
+    width: 24px;
+    height: 24px;
+}
+
+.pillar-topline span {
+    color: var(--primary-color);
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.service-pillar h3 {
+    margin-bottom: 14px;
+    font-size: 23px;
+    line-height: 1.25;
+}
+
+.service-pillar p {
+    margin-bottom: 22px;
+    color: var(--text-light);
+    font-size: 15px;
+}
+
+.service-pillar ul,
+.pricing-card ul {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.service-pillar li,
+.pricing-card li {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--text-main);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.check-icon {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    color: #22c55e;
+}
+
+.operations-panel {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 28px;
+    align-items: center;
+    margin-top: 32px;
+    border: 1px solid rgb(15 23 42 / 8%);
+    border-radius: 8px;
+    background: #0f172a;
+    box-shadow: 0 24px 70px rgb(15 23 42 / 18%);
+    padding: 32px;
+}
+
+.operations-copy span {
+    color: #67e8f9;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+}
+
+.operations-copy h3 {
+    margin-top: 10px;
+    color: #ffffff;
+    font-size: 34px;
+    line-height: 1.15;
+}
+
+.operations-copy p {
+    margin-top: 16px;
+    color: #cbd5e1;
+}
+
+.live-module-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.live-module {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid rgb(255 255 255 / 10%);
+    border-radius: 8px;
+    background: rgb(255 255 255 / 7%);
+    padding: 16px;
+}
+
+.live-module-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    color: #38bdf8;
+}
+
+.live-module strong {
+    display: block;
+    color: #ffffff;
+    font-family: Poppins, Inter, ui-sans-serif, system-ui, sans-serif;
+    font-size: 18px;
+}
+
+.live-module span {
+    display: block;
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 700;
 }
 
 .section {
@@ -1736,6 +2477,14 @@ nav {
     background: var(--vet-color);
 }
 
+.solution-card.saas::before {
+    background: var(--saas-color);
+}
+
+.solution-card.chatbot::before {
+    background: var(--chatbot-color);
+}
+
 .solution-icon-wrapper {
     display: flex;
     align-items: center;
@@ -1770,6 +2519,16 @@ nav {
 .veterinaria .solution-icon-wrapper {
     background: rgb(13 148 136 / 10%);
     color: var(--vet-color);
+}
+
+.saas .solution-icon-wrapper {
+    background: rgb(37 99 235 / 10%);
+    color: var(--saas-color);
+}
+
+.chatbot .solution-icon-wrapper {
+    background: rgb(6 182 212 / 10%);
+    color: var(--chatbot-color);
 }
 
 .solution-card:hover .solution-icon-wrapper {
@@ -1858,6 +2617,7 @@ nav {
     flex-wrap: wrap;
     justify-content: center;
     gap: 15px;
+    max-width: 100%;
 }
 
 .filter-btn {
@@ -2086,6 +2846,84 @@ nav {
     font-size: 13px;
 }
 
+.pricing {
+    background: #ffffff;
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.pricing-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 12px 35px rgb(15 23 42 / 6%);
+    padding: 30px;
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        transform 0.3s ease;
+}
+
+.pricing-card.highlighted {
+    border-color: rgb(37 99 235 / 45%);
+    box-shadow: 0 24px 70px rgb(37 99 235 / 16%);
+    transform: translateY(-10px);
+}
+
+.pricing-card:hover {
+    border-color: rgb(37 99 235 / 35%);
+    box-shadow: 0 24px 60px rgb(15 23 42 / 10%);
+    transform: translateY(-8px);
+}
+
+.pricing-card.highlighted:hover {
+    transform: translateY(-14px);
+}
+
+.popular-badge {
+    display: inline-flex;
+    width: fit-content;
+    margin-bottom: 14px;
+    border-radius: 999px;
+    background: #dbeafe;
+    color: var(--primary-color);
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    padding: 6px 10px;
+    text-transform: uppercase;
+}
+
+.pricing-header h3 {
+    font-size: 26px;
+}
+
+.pricing-header strong {
+    display: block;
+    margin-top: 12px;
+    color: var(--dark-bg);
+    font-family: Poppins, Inter, ui-sans-serif, system-ui, sans-serif;
+    font-size: 30px;
+    line-height: 1.1;
+}
+
+.pricing-header p {
+    margin-top: 14px;
+    color: var(--text-light);
+}
+
+.pricing-card .btn {
+    margin-top: auto;
+}
+
 .contact-form {
     max-width: 700px;
     margin: 0 auto;
@@ -2159,7 +2997,9 @@ textarea.form-control {
 .login-modal {
     position: relative;
     width: min(100%, 460px);
-    overflow: hidden;
+    max-height: calc(100vh - 48px);
+    overflow-x: hidden;
+    overflow-y: auto;
     border: 1px solid rgb(226 232 240 / 70%);
     border-radius: 8px;
     background: #ffffff;
@@ -2282,6 +3122,66 @@ textarea.form-control {
     accent-color: var(--primary-color);
 }
 
+.whatsapp-float {
+    position: fixed;
+    z-index: 1500;
+    right: 24px;
+    bottom: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 46px;
+    border: 1px solid rgb(255 255 255 / 28%);
+    border-radius: 999px;
+    background: linear-gradient(135deg, #25d366, #128c7e);
+    box-shadow:
+        0 16px 36px rgb(18 140 126 / 32%),
+        inset 0 1px 0 rgb(255 255 255 / 28%);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 900;
+    padding: 11px 18px;
+    text-decoration: none;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.whatsapp-float::before {
+    content: '';
+    position: absolute;
+    inset: -7px;
+    z-index: -1;
+    border-radius: inherit;
+    background: rgb(37 211 102 / 18%);
+    animation: whatsappPulse 2.4s ease-in-out infinite;
+}
+
+.whatsapp-float:hover {
+    box-shadow:
+        0 20px 46px rgb(18 140 126 / 42%),
+        inset 0 1px 0 rgb(255 255 255 / 28%);
+    transform: translateY(-3px);
+}
+
+.whatsapp-float-icon {
+    width: 20px;
+    height: 20px;
+}
+
+@keyframes whatsappPulse {
+    0%,
+    100% {
+        opacity: 0.55;
+        transform: scale(0.92);
+    }
+
+    50% {
+        opacity: 0;
+        transform: scale(1.18);
+    }
+}
+
 footer {
     border-top: 1px solid rgb(255 255 255 / 10%);
     background: var(--dark-bg);
@@ -2360,7 +3260,7 @@ footer {
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
     .nav-links,
     .nav-actions {
         display: none;
@@ -2399,10 +3299,11 @@ footer {
         text-align: center;
     }
 
-    .hero-text h1 {
-        font-size: 42px;
+    .hero-text p {
+        max-width: 720px;
     }
 
+    .hero-tech-row,
     .hero-btns {
         justify-content: center;
     }
@@ -2416,6 +3317,12 @@ footer {
     .visual-card:hover {
         transform: none;
     }
+}
+
+@media (max-width: 900px) {
+    .hero-text h1 {
+        font-size: 42px;
+    }
 
     .proof-strip {
         margin-top: 0;
@@ -2425,6 +3332,36 @@ footer {
 
     .proof-grid {
         grid-template-columns: 1fr;
+    }
+
+    .service-pillar-grid,
+    .pricing-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .operations-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .live-module-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .pricing-card.highlighted {
+        transform: none;
+    }
+
+    .impact-panel {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .impact-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .impact-whatsapp {
+        justify-self: center;
     }
 }
 
@@ -2436,6 +3373,10 @@ footer {
 
     .section {
         padding: 84px 0;
+    }
+
+    .mobile-actions .login-cta {
+        display: none;
     }
 
     .section-title {
@@ -2452,7 +3393,7 @@ footer {
     }
 
     .hero {
-        padding-top: 120px;
+        padding-top: 104px;
     }
 
     .hero-text h1 {
@@ -2474,6 +3415,14 @@ footer {
         right: auto;
         bottom: auto;
         width: 100%;
+        margin-top: 12px;
+    }
+
+    .hero-module-cloud {
+        position: relative;
+        right: auto;
+        bottom: auto;
+        left: auto;
         margin-top: 12px;
     }
 
@@ -2525,6 +3474,17 @@ footer {
         padding: 26px;
     }
 
+    .whatsapp-float {
+        right: 18px;
+        bottom: 18px;
+        min-height: 46px;
+        padding: 12px;
+    }
+
+    .whatsapp-float span {
+        display: none;
+    }
+
     .testimonials-grid {
         grid-template-columns: 1fr;
     }
@@ -2532,11 +3492,40 @@ footer {
     .solutions-grid {
         grid-template-columns: 1fr;
     }
+
+    .operations-panel {
+        padding: 24px;
+    }
+
+    .operations-copy h3 {
+        font-size: 22px;
+    }
+
+    .live-module-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .impact-band {
+        padding-top: 28px;
+    }
+
+    .impact-panel {
+        padding: 22px;
+    }
+
+    .impact-copy h2 {
+        font-size: 24px;
+    }
 }
 
 @media (min-width: 641px) and (max-width: 900px) {
     .proof-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .service-pillar-grid,
+    .pricing-grid {
+        grid-template-columns: 1fr;
     }
 
     .hero-text h1 {
@@ -2549,16 +3538,33 @@ footer {
 }
 
 @media (max-width: 480px) {
-    .logo-button {
-        font-size: 20px;
+    nav {
+        min-height: 72px;
     }
 
-    .mobile-actions .login-cta {
-        display: none;
+    .logo-button {
+        gap: 8px;
+        font-size: 26px;
+    }
+
+    .brand-mark {
+        width: 34px;
+        height: 34px;
+        font-size: 11px;
+    }
+
+    .brand-name {
+        font-size: 28px;
     }
 
     .hero {
         padding-top: 100px;
+    }
+
+    .hero-badge,
+    .hero-tech-badge {
+        justify-content: center;
+        text-align: center;
     }
 
     .hero-text h1 {
@@ -2605,6 +3611,41 @@ footer {
     .proof-item {
         gap: 12px;
         padding: 18px;
+    }
+
+    .impact-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 360px) {
+    .container,
+    .hero-container {
+        width: min(100% - 24px, 1280px);
+    }
+
+    .hero-text h1 {
+        font-size: 28px;
+    }
+
+    .btn,
+    .btn-outline,
+    .login-link {
+        padding-right: 16px;
+        padding-left: 16px;
+    }
+
+    .hero-stat,
+    .service-pillar,
+    .pricing-card,
+    .feature-item,
+    .portfolio-info {
+        padding-right: 16px;
+        padding-left: 16px;
+    }
+
+    .login-modal {
+        padding: 28px 18px;
     }
 }
 </style>

@@ -109,11 +109,15 @@ Valid toast types: `success`, `info`, `warning`, `error`.
 ## Public Landing
 
 - `/` is a standalone company landing for Solucion Digital in
-  `resources/js/pages/Welcome.vue`.
+  `resources/js/pages/public/Welcome.vue`.
 - The landing includes its own header, footer, portfolio filter, and contact
   form. `PublicLayout.vue` skips its wrapper on `/` to avoid duplicate chrome.
 - The landing contact form posts to `/contact` through Inertia and sends
   `name`, `email`, `phone`, `business_type`, and `message`.
+- The landing now positions Solucion Digital as a software development company
+  with SaaS system rental, distributor SaaS plans, chatbot/automation, and
+  business systems for restaurants, retail, pharmacy, hardware, and veterinary
+  workflows.
 
 ## Wayfinder / Generated Files
 
@@ -198,3 +202,25 @@ When adding a new admin feature, follow this local pattern:
 - 2026-05-16: Changed the public landing `Iniciar sesión` desktop/mobile action
   into a professional modal login form that posts to Fortify `/login`, with
   remember-me and forgot-password access.
+- 2026-06-04: Enhanced `resources/js/pages/public/Welcome.vue` with stronger
+  Solucion Digital positioning, SaaS rental/distributor messaging, chatbot and
+  automation services, live module chips, a SaaS showcase section, pricing
+  plan cards, updated contact options, responsive CSS, and refreshed SEO text.
+- 2026-06-04: Tightened public landing responsiveness across desktop, laptop,
+  tablet, and small mobile widths. The header now collapses earlier, mobile
+  header actions avoid horizontal overflow, hero spacing is shorter for
+  768px-height screens, cards/forms wrap cleanly, and the login modal scrolls
+  within short viewports.
+- 2026-06-04: Made the Solucion Digital brand more prominent in the public
+  header with an `SD` mark and stronger brand typography, while reducing
+  global/public landing button sizes for a lighter header and CTA feel.
+- 2026-06-04: Increased the actual `Solucion Digital` header text size and made
+  header buttons more compact after clarifying that the brand words, not only
+  the `SD` mark, needed more visual weight.
+- 2026-06-04: Added a floating WhatsApp contact button to the public landing
+  that opens `wa.me/59177149775` with a prefilled Solucion Digital inquiry
+  message. It shows text on desktop and collapses to an icon-only button on
+  mobile.
+- 2026-06-04: Added an extra public landing "wow" layer: animated hero light
+  sweep plus a post-hero diagnostic CTA band with impact stats and direct
+  WhatsApp action for faster lead capture.

@@ -22,13 +22,15 @@ El proyecto esta separado en cuatro zonas:
 
 Rutas principales:
 
-- `/` carga `resources/js/pages/Welcome.vue`.
+- `/` carga `resources/js/pages/public/Welcome.vue`.
 - `/about` carga `resources/js/pages/public/About.vue`.
 - `/contact` carga `resources/js/pages/public/Contact.vue`.
 - `POST /contact` usa `app/Http/Controllers/Public/ContactController.php`.
 
 La landing `Welcome.vue` es independiente. Tiene su propio header, secciones,
-footer, filtro de portafolio y formulario de contacto.
+footer, filtro de portafolio y formulario de contacto. El archivo real vive en:
+
+`resources/js/pages/public/Welcome.vue`
 
 La landing tambien incluye efectos dinamicos:
 
@@ -36,10 +38,34 @@ La landing tambien incluye efectos dinamicos:
 - Animaciones reveal al entrar cada bloque en pantalla.
 - Hero con parallax suave segun el puntero.
 - Tarjeta visual tipo dashboard con metricas animadas.
+- Chips animados de modulos activos sobre el hero.
 - Estadisticas principales y bloque de proceso en tres pasos.
+- Seccion `SaaS, chatbot y desarrollo` con pilares de servicio.
+- Panel oscuro de centro de control con modulos activos.
+- Seccion de planes flexibles: Emprende, Crecimiento y Distribuidor.
 - Boton `Iniciar sesion` en el menu principal y menu movil. Abre un modal
   profesional en la landing con formulario real hacia `/login`, opcion
   `Recordarme` y enlace a recuperacion de password.
+
+Responsive actual:
+
+- En laptop chica y tablet horizontal el header cambia a menu movil desde
+  `1100px` para evitar que los links se aplasten.
+- En celular se oculta el boton de login del header y queda el menu compacto.
+- Hero, dashboard visual, tarjetas, portafolio, planes y contacto bajan a una
+  columna segun el ancho disponible.
+- En pantallas muy pequenas (`360px`) se reducen paddings para evitar
+  desbordes.
+- El modal de login tiene alto maximo y scroll interno para pantallas bajas.
+
+La propuesta comercial publica ahora comunica:
+
+- Alquiler de sistemas SaaS.
+- Distribuidor SaaS.
+- Chatbot para WhatsApp/web y automatizaciones.
+- Sistemas por rubro: restaurantes, comercios, farmacias, ferreterias y
+  veterinarias.
+- Desarrollo a medida, web/movil, facturacion, inventario, reportes y soporte.
 
 `resources/js/layouts/PublicLayout.vue` detecta si estas en `/`. Si estas en la
 landing, no agrega navbar/footer extra para evitar duplicados.
