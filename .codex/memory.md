@@ -228,3 +228,6 @@ When adding a new admin feature, follow this local pattern:
   logo asset from `public/image/logo.png`.
 - 2026-06-06: Updated the global browser tab icon to use
   `public/image/icono.png` from `resources/views/app.blade.php`.
+- 2026-06-06: Added public landing SEO image metadata in `Welcome.vue`,
+  including Open Graph, Twitter card, thumbnail, canonical URL, and
+  Schema.org Organization JSON-LD pointing to `public/image/logo.png`.

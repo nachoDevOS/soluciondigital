@@ -52,7 +52,8 @@
             }
         </style>
 
-        <link rel="icon" href="/image/icono.png" type="image/png">
+        <link rel="icon" href="/image/icono.png" type="image/png" sizes="any">
+        <link rel="shortcut icon" href="/image/icono.png" type="image/png">
         <link rel="apple-touch-icon" href="/image/icono.png">
 
         @fonts

@@ -72,6 +72,27 @@ const loginForm = useForm({
 
 const whatsappUrl =
     'https://wa.me/59177149775?text=Hola%20Soluci%C3%B3n%20Digital%2C%20quiero%20informaci%C3%B3n%20sobre%20sus%20sistemas%20SaaS%20y%20chatbot.';
+const siteUrl = 'https://soluciondigital.dev';
+const seoTitle = 'Solución Digital | Sistemas SaaS, chatbot y software a medida';
+const seoDescription =
+    'Solución Digital crea y alquila sistemas SaaS, punto de venta, inventario, facturación, chatbot, automatizaciones y software a medida para negocios.';
+const logoUrl = `${siteUrl}/image/logo.png`;
+const iconUrl = `${siteUrl}/image/icono.png`;
+const organizationJsonLd = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Solución Digital',
+    url: siteUrl,
+    logo: logoUrl,
+    image: logoUrl,
+    description: seoDescription,
+    contactPoint: {
+        '@type': 'ContactPoint',
+        telephone: '+59177149775',
+        contactType: 'customer support',
+        availableLanguage: 'es',
+    },
+});
 
 // Links del menu superior de la landing.
 const navLinks = [
@@ -466,11 +487,32 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <Head title="Solución Digital | Sistemas SaaS, chatbot y software a medida">
-        <meta
-            name="description"
-            content="Solución Digital crea y alquila sistemas SaaS, punto de venta, inventario, facturación, chatbot, automatizaciones y software a medida para negocios."
-        />
+    <Head :title="seoTitle">
+        <meta name="description" :content="seoDescription" />
+        <link rel="canonical" :href="siteUrl" />
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="es_BO" />
+        <meta property="og:site_name" content="Solución Digital" />
+        <meta property="og:title" :content="seoTitle" />
+        <meta property="og:description" :content="seoDescription" />
+        <meta property="og:url" :content="siteUrl" />
+        <meta property="og:image" :content="logoUrl" />
+        <meta property="og:image:secure_url" :content="logoUrl" />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="1254" />
+        <meta property="og:image:height" content="1254" />
+        <meta property="og:image:alt" content="Logo de Solución Digital" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" :content="seoTitle" />
+        <meta name="twitter:description" :content="seoDescription" />
+        <meta name="twitter:image" :content="logoUrl" />
+        <meta name="twitter:image:alt" content="Logo de Solución Digital" />
+        <meta name="thumbnail" :content="logoUrl" />
+        <meta itemprop="name" content="Solución Digital" />
+        <meta itemprop="description" :content="seoDescription" />
+        <meta itemprop="image" :content="logoUrl" />
+        <link rel="icon" :href="iconUrl" type="image/png" />
+        <script type="application/ld+json" v-html="organizationJsonLd"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
         <link
