@@ -485,8 +485,13 @@ onBeforeUnmount(() => {
             <div class="container">
                 <nav aria-label="Navegación principal">
                     <button type="button" class="logo-button" @click="scrollToSection('#inicio')">
-                        <span class="brand-mark" aria-hidden="true">SD</span>
-                        <span class="brand-name">Solución <span>Digital</span></span>
+                        <img
+                            src="/image/logo.png"
+                            alt="Solución Digital"
+                            class="brand-logo"
+                            width="1254"
+                            height="1254"
+                        />
                     </button>
 
                     <ul class="nav-links">
@@ -1263,51 +1268,19 @@ nav {
     display: inline-flex;
     flex-shrink: 0;
     align-items: center;
-    gap: 12px;
+    justify-content: center;
     border: 0;
     background: transparent;
-    color: #ffffff;
     cursor: pointer;
-    font-family: Poppins, Inter, ui-sans-serif, system-ui, sans-serif;
-    font-size: 38px;
-    font-weight: 800;
-    letter-spacing: 0;
+    line-height: 0;
 }
 
-.brand-mark {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    border: 1px solid rgb(56 189 248 / 35%);
-    border-radius: 8px;
-    background:
-        linear-gradient(135deg, rgb(14 165 233 / 95%), rgb(37 99 235 / 95%)),
-        #0ea5e9;
-    box-shadow:
-        0 10px 24px rgb(14 165 233 / 24%),
-        inset 0 1px 0 rgb(255 255 255 / 28%);
-    color: #ffffff;
-    font-size: 13px;
-    font-weight: 900;
-    letter-spacing: 0.5px;
-}
-
-.brand-name {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 7px;
-    color: #ffffff;
-    font-size: 29px;
-    font-weight: 900;
-    line-height: 1;
-    text-shadow: 0 8px 24px rgb(14 165 233 / 16%);
-}
-
-.brand-name span {
-    color: var(--secondary-color);
-    text-shadow: 0 0 18px rgb(14 165 233 / 42%);
+.brand-logo {
+    display: block;
+    width: 68px;
+    height: 68px;
+    border-radius: 12px;
+    object-fit: contain;
 }
 
 .nav-links {
@@ -3543,18 +3516,13 @@ footer {
     }
 
     .logo-button {
-        gap: 8px;
-        font-size: 26px;
+        flex-shrink: 1;
     }
 
-    .brand-mark {
-        width: 34px;
-        height: 34px;
-        font-size: 11px;
-    }
-
-    .brand-name {
-        font-size: 28px;
+    .brand-logo {
+        width: 52px;
+        height: 52px;
+        border-radius: 10px;
     }
 
     .hero {

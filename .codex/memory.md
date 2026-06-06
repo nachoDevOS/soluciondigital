@@ -224,3 +224,7 @@ When adding a new admin feature, follow this local pattern:
 - 2026-06-04: Added an extra public landing "wow" layer: animated hero light
   sweep plus a post-hero diagnostic CTA band with impact stats and direct
   WhatsApp action for faster lead capture.
+- 2026-06-06: Replaced the public landing header text/`SD` mark with the real
+  logo asset from `public/image/logo.png`.
+- 2026-06-06: Updated the global browser tab icon to use
+  `public/image/icono.png` from `resources/views/app.blade.php`.
