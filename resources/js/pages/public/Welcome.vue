@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import {
     ArrowRight,
     Bot,
@@ -52,6 +52,7 @@ const isScrolled = ref(false);
 const mobileMenuOpen = ref(false);
 const loginModalOpen = ref(false);
 const selectedFilter = ref<PortfolioFilter>('all');
+const authUser = computed(() => usePage().props.auth?.user ?? null);
 const scrollProgress = ref(0);
 const pointerX = ref(0);
 const pointerY = ref(0);
@@ -554,13 +555,19 @@ onBeforeUnmount(() => {
                         <button type="button" class="btn btn-sm" @click="scrollToSection('#contacto')">
                             Contacto
                         </button>
-                        <button type="button" class="login-link login-cta" @click="openLoginModal">
+                        <Link v-if="authUser" href="/admin/dashboard" class="btn btn-sm btn-panel">
+                            Ir al panel
+                        </Link>
+                        <button v-else type="button" class="login-link login-cta" @click="openLoginModal">
                             Iniciar sesión
                         </button>
                     </div>
 
                     <div class="mobile-actions">
-                        <button type="button" class="login-link login-cta" @click="openLoginModal">
+                        <Link v-if="authUser" href="/admin/dashboard" class="btn btn-sm btn-panel">
+                            Ir al panel
+                        </Link>
+                        <button v-else type="button" class="login-link login-cta" @click="openLoginModal">
                             Iniciar sesión
                         </button>
                         <button
@@ -587,7 +594,10 @@ onBeforeUnmount(() => {
                     <button type="button" class="btn btn-sm" @click="scrollToSection('#contacto')">
                         Contacto
                     </button>
-                    <button type="button" class="login-link login-cta mobile-login" @click="openLoginModal">
+                    <Link v-if="authUser" href="/admin/dashboard" class="btn btn-sm btn-panel mobile-login">
+                        Ir al panel
+                    </Link>
+                    <button v-else type="button" class="login-link login-cta mobile-login" @click="openLoginModal">
                         Iniciar sesión
                     </button>
                 </div>
@@ -1792,6 +1802,17 @@ nav {
     min-height: 30px;
     padding: 6px 14px;
     font-size: 12px;
+}
+
+.btn-panel {
+    background: linear-gradient(135deg, #a855f7, #7c3aed);
+    box-shadow: 0 4px 20px rgb(168 85 247 / 35%);
+    text-decoration: none;
+}
+
+.btn-panel:hover {
+    background: linear-gradient(135deg, #c084fc, #a855f7);
+    box-shadow: 0 8px 28px rgb(168 85 247 / 45%);
 }
 
 .btn-restaurant {
