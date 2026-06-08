@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppContent from '@/components/admin/AppContent.vue';
+import AppFooter from '@/components/admin/AppFooter.vue';
 import AppShell from '@/components/admin/AppShell.vue';
 import AppSidebar from '@/components/admin/AppSidebar.vue';
 import AppSidebarHeader from '@/components/admin/AppSidebarHeader.vue';
@@ -17,6 +18,7 @@ const { breadcrumbs = [] } = defineProps<{
         <AppContent variant="sidebar" class="overflow-x-hidden">
             <AppSidebarHeader :breadcrumbs="breadcrumbs" />
             <slot />
+            <AppFooter />
         </AppContent>
         <Toaster />
     </AppShell>
