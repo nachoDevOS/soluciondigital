@@ -80,46 +80,26 @@ withDefaults(
             items-center → alineación vertical centrada.
             gap-2        → espacio entre el trigger y los breadcrumbs.
         -->
-        <div class="flex items-center gap-2">
+        <!-- min-w-0: permite que flex-children se compriman y no desborden en pantallas pequeñas -->
+        <div class="flex min-w-0 items-center gap-2">
 
-            <!--
-                SidebarTrigger: el botón hamburguesa (☰).
-                Al hacer click abre/cierra el sidebar.
-                -ml-1 → margen negativo izquierdo para alinearlo visualmente con el borde.
-
-                Clases añadidas para mejorar el aspecto:
-                  hover:bg-sidebar-accent/60    → fondo sutil al hacer hover
-                  transition-colors duration-200 → el hover anima suavemente
-                  rounded-md                    → esquinas redondeadas
-            -->
             <SidebarTrigger
-                class="-ml-1 hover:bg-sidebar-accent/60 transition-colors duration-200 rounded-md"
+                class="-ml-1 shrink-0 hover:bg-sidebar-accent/60 transition-colors duration-200 rounded-md"
             />
 
             <!--
-                v-if="breadcrumbs && breadcrumbs.length > 0":
-                  Solo muestra los breadcrumbs si existen y hay al menos uno.
-                  En Vue, v-if elimina el elemento del DOM completamente si la condición es false.
-
-                <template> con v-if: es un elemento "fantasma" de Vue — no renderiza ningún
-                  HTML propio, solo sirve para agrupar lógica condicional sin agregar un <div> extra.
+                hidden sm:flex: en móvil (< 640px) se ocultan los breadcrumbs para
+                no aplastar el header. En sm+ vuelven a aparecer.
+                min-w-0: permite que el contenedor flex se comprima si no hay espacio.
             -->
             <template v-if="breadcrumbs && breadcrumbs.length > 0">
-
-                <!--
-                    Separador visual entre el trigger y los breadcrumbs.
-                    h-4 w-px → línea vertical de 1px de ancho y 1rem de alto.
-                    bg-sidebar-border/50 → color del borde del sidebar al 50% de opacidad.
-                -->
-                <div class="h-4 w-px bg-sidebar-border/50" />
-
-                <!--
-                    Breadcrumbs: recibe el array de migas de pan y las renderiza.
-                    :breadcrumbs="breadcrumbs" → le pasamos el prop que recibimos del padre.
-                    La sintaxis :prop="valor" (con dos puntos) es "v-bind:prop" abreviado —
-                    le dice a Vue que "valor" es una variable JavaScript, no un string literal.
-                -->
-                <Breadcrumbs :breadcrumbs="breadcrumbs" />
+                <div class="hidden sm:flex items-center gap-2 min-w-0">
+                    <div class="h-4 w-px shrink-0 bg-sidebar-border/50" />
+                    <!-- overflow-hidden min-w-0: el breadcrumb trunca si el texto es muy largo -->
+                    <div class="min-w-0 overflow-hidden">
+                        <Breadcrumbs :breadcrumbs="breadcrumbs" />
+                    </div>
+                </div>
             </template>
         </div>
 

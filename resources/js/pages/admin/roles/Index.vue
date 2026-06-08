@@ -273,15 +273,15 @@ const allPermissionsGrouped = computed(() => groupPermissions(allPermissions));
 <template>
     <Head title="Roles y Permisos" />
 
-    <div class="flex flex-col gap-6 p-4">
+    <div class="flex flex-col gap-6 p-4 sm:p-6">
 
         <!-- ─── ENCABEZADO ─────────────────────────────────── -->
-        <div class="flex items-start justify-between">
+        <div class="flex flex-wrap items-start justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+                <h1 class="text-2xl font-bold text-foreground">
                     Roles y Permisos
                 </h1>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                <p class="mt-1 text-sm text-muted-foreground">
                     {{ roles.length }} roles · {{ totalUsers }} usuarios en total
                 </p>
             </div>
@@ -294,7 +294,7 @@ const allPermissionsGrouped = computed(() => groupPermissions(allPermissions));
             <button
                 v-if="canEdit"
                 type="button"
-                class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm transition-all hover:bg-primary/90 hover:shadow-md active:scale-95"
+                class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-md active:scale-95"
                 @click="openCreate"
             >
                 <!-- Plus: ícono de + de Lucide -->
@@ -308,10 +308,10 @@ const allPermissionsGrouped = computed(() => groupPermissions(allPermissions));
             -->
             <div
                 v-else
-                class="flex items-center gap-1.5 rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 dark:border-gray-700 dark:bg-gray-800"
+                class="flex items-center gap-1.5 rounded-full border border-border bg-muted px-3 py-1.5"
             >
-                <Lock class="size-3.5 text-gray-400" />
-                <span class="text-xs text-gray-500 dark:text-gray-400">Solo lectura</span>
+                <Lock class="size-3.5 text-muted-foreground" />
+                <span class="text-xs text-muted-foreground">Solo lectura</span>
             </div>
         </div>
 
@@ -325,7 +325,7 @@ const allPermissionsGrouped = computed(() => groupPermissions(allPermissions));
             <div
                 v-for="role in roles"
                 :key="role.id"
-                class="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
+                class="flex flex-col gap-4 rounded-xl border border-border bg-card p-5 shadow-sm transition-shadow hover:shadow-md"
             >
                 <!-- Cabecera de la card: ícono + nombre + conteo de usuarios + botón editar -->
                 <div class="flex items-center justify-between">
@@ -343,10 +343,10 @@ const allPermissionsGrouped = computed(() => groupPermissions(allPermissions));
                             <ShieldCheck class="size-5" />
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-900 dark:text-white">
+                            <h3 class="font-semibold text-foreground">
                                 {{ getRoleConfig(role.name).label }}
                             </h3>
-                            <span class="text-xs text-gray-400 dark:text-gray-500">
+                            <span class="text-xs text-muted-foreground/70">
                                 {{ role.name }}
                             </span>
                         </div>
@@ -355,9 +355,9 @@ const allPermissionsGrouped = computed(() => groupPermissions(allPermissions));
                     <!-- Lado derecho: conteo de usuarios + botón editar -->
                     <div class="flex items-center gap-2">
                         <!-- Badge de conteo de usuarios -->
-                        <div class="flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-1 dark:bg-gray-700">
-                            <Users class="size-3.5 text-gray-500 dark:text-gray-400" />
-                            <span class="text-xs font-medium text-gray-600 dark:text-gray-300">
+                        <div class="flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-1">
+                            <Users class="size-3.5 text-muted-foreground" />
+                            <span class="text-xs font-medium text-muted-foreground">
                                 {{ role.users_count }}
                             </span>
                         </div>
@@ -370,7 +370,7 @@ const allPermissionsGrouped = computed(() => groupPermissions(allPermissions));
                         <button
                             v-if="canEdit"
                             type="button"
-                            class="flex size-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 transition-all hover:border-primary/50 hover:bg-primary/5 hover:text-primary dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:border-primary/50 dark:hover:bg-primary/10 dark:hover:text-primary"
+                            class="flex size-8 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
                             title="Editar permisos"
                             @click="openEdit(role)"
                         >
@@ -380,22 +380,17 @@ const allPermissionsGrouped = computed(() => groupPermissions(allPermissions));
                 </div>
 
                 <!-- Permisos agrupados por módulo -->
-                <div class="border-t border-gray-100 pt-3 dark:border-gray-700">
-                    <div v-if="role.permissions.length === 0" class="text-sm text-gray-400 dark:text-gray-500">
+                <div class="border-t border-border pt-3">
+                    <div v-if="role.permissions.length === 0" class="text-sm text-muted-foreground">
                         Sin permisos asignados.
                     </div>
                     <div v-else class="flex flex-col gap-2">
-                        <!--
-                            Object.entries() convierte el objeto agrupado a array de pares.
-                            v-for descompone: [module, perms] = ['users', ['users.view', 'users.edit']]
-                        -->
                         <div
                             v-for="[module, perms] in Object.entries(groupPermissions(role.permissions))"
                             :key="module"
                             class="flex items-center gap-2"
                         >
-                            <!-- Nombre del módulo -->
-                            <span class="w-20 shrink-0 text-xs font-medium capitalize text-gray-500 dark:text-gray-400">
+                            <span class="w-20 shrink-0 text-xs font-medium capitalize text-muted-foreground">
                                 {{ module }}
                             </span>
                             <!-- Badges de acción -->
@@ -420,10 +415,10 @@ const allPermissionsGrouped = computed(() => groupPermissions(allPermissions));
         <!-- Mensaje vacío -->
         <div
             v-if="roles.length === 0"
-            class="rounded-xl border border-dashed border-gray-200 bg-gray-50 py-16 text-center dark:border-gray-700 dark:bg-gray-800/50"
+            class="rounded-xl border border-dashed border-border bg-muted/50 py-16 text-center"
         >
-            <ShieldCheck class="mx-auto mb-3 size-10 text-gray-300 dark:text-gray-600" />
-            <p class="text-sm text-gray-400 dark:text-gray-500">No hay roles configurados.</p>
+            <ShieldCheck class="mx-auto mb-3 size-10 text-muted-foreground/30" />
+            <p class="text-sm text-muted-foreground">No hay roles configurados.</p>
         </div>
     </div>
 
@@ -465,7 +460,7 @@ const allPermissionsGrouped = computed(() => groupPermissions(allPermissions));
                 <div v-if="!isEditMode" class="flex flex-col gap-1.5">
                     <label
                         for="role-name"
-                        class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                        class="text-sm font-medium text-foreground"
                     >
                         Nombre del rol
                     </label>
@@ -474,23 +469,19 @@ const allPermissionsGrouped = computed(() => groupPermissions(allPermissions));
                         v-model="form.name"
                         type="text"
                         placeholder="ej: supervisor"
-                        class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500"
+                        class="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
-                    <!--
-                        form.errors.name → mensaje de error que viene del backend (validación Laravel).
-                        Solo se muestra si hay error en ese campo.
-                    -->
-                    <p v-if="form.errors.name" class="text-xs text-red-500">
+                    <p v-if="form.errors.name" class="text-xs text-destructive">
                         {{ form.errors.name }}
                     </p>
-                    <p class="text-xs text-gray-400 dark:text-gray-500">
+                    <p class="text-xs text-muted-foreground">
                         Solo minúsculas, números y guiones. Ej: <code class="font-mono">mi-rol</code>
                     </p>
                 </div>
 
                 <!-- ─── CHECKBOXES DE PERMISOS ───────────────── -->
                 <div class="flex flex-col gap-3">
-                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <span class="text-sm font-medium text-foreground">
                         Permisos
                     </span>
 
@@ -509,7 +500,7 @@ const allPermissionsGrouped = computed(() => groupPermissions(allPermissions));
                         <div
                             v-for="[module, perms] in Object.entries(allPermissionsGrouped)"
                             :key="module"
-                            class="rounded-lg border border-gray-200 p-3 dark:border-gray-700"
+                            class="rounded-lg border border-border bg-muted/30 p-3"
                         >
                             <!-- Cabecera del módulo con checkbox "seleccionar todos" -->
                             <div class="mb-2 flex items-center gap-2">
@@ -527,7 +518,7 @@ const allPermissionsGrouped = computed(() => groupPermissions(allPermissions));
                                 />
                                 <label
                                     :for="`module-${module}`"
-                                    class="cursor-pointer text-sm font-semibold capitalize text-gray-800 dark:text-gray-200"
+                                    class="cursor-pointer text-sm font-semibold capitalize text-foreground"
                                 >
                                     {{ module }}
                                 </label>
@@ -552,7 +543,7 @@ const allPermissionsGrouped = computed(() => groupPermissions(allPermissions));
                                     />
                                     <label
                                         :for="perm"
-                                        class="cursor-pointer text-sm text-gray-600 dark:text-gray-400"
+                                        class="cursor-pointer text-sm text-muted-foreground"
                                     >
                                         <!-- Mostramos la acción con badge de color -->
                                         <span
@@ -578,7 +569,7 @@ const allPermissionsGrouped = computed(() => groupPermissions(allPermissions));
                     -->
                     <button
                         type="button"
-                        class="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                        class="flex-1 rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
                         @click="closeModal"
                     >
                         Cancelar
@@ -593,7 +584,7 @@ const allPermissionsGrouped = computed(() => groupPermissions(allPermissions));
                     <button
                         type="submit"
                         :disabled="form.processing"
-                        class="flex-1 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                        class="flex-1 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         <!--
                             Texto del botón cambia según el estado:

@@ -2,6 +2,18 @@
 import { Head, Link } from '@inertiajs/vue3';
 import type { User } from '@/types';
 
+// Importamos todos los componentes de tabla desde el barrel export.
+// Cada componente aplica el estilo estándar del tema automáticamente.
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableEmpty,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+
 type PaginatedUsers = {
     data: User[];
     current_page: number;
@@ -41,101 +53,104 @@ function paginationLabel(label: string) {
 <template>
     <Head title="Usuarios" />
 
-    <div class="flex flex-col gap-6 p-4">
-        <!-- Header -->
-        <div class="flex items-center justify-between">
+    <div class="flex flex-col gap-6 p-4 sm:p-6">
+
+        <!-- Encabezado: flex-wrap para que el botón baje en pantallas pequeñas -->
+        <div class="flex flex-wrap items-center justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Usuarios</h1>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                <h1 class="text-2xl font-bold text-foreground">Usuarios</h1>
+                <p class="mt-1 text-sm text-muted-foreground">
                     {{ users.total }} {{ users.total === 1 ? 'usuario registrado' : 'usuarios registrados' }}
                 </p>
             </div>
         </div>
 
-        <!-- Table -->
-        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-            <table class="w-full min-w-[600px] text-sm">
-                <thead>
-                    <tr class="border-b border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-700/50">
-                        <th class="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                            Nombre
-                        </th>
-                        <th class="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                            Email
-                        </th>
-                        <th class="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                            Registro
-                        </th>
-                        <th class="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                            Estado
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                    <tr
-                        v-for="user in users.data"
-                        :key="user.id"
-                        class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/30"
-                    >
-                        <td class="px-5 py-4 font-medium text-gray-900 dark:text-white">
-                            {{ user.name }}
-                        </td>
-                        <td class="px-5 py-4 text-gray-500 dark:text-gray-400">
-                            {{ user.email }}
-                        </td>
-                        <td class="px-5 py-4 text-gray-500 dark:text-gray-400">
-                            {{ formatDate(user.created_at) }}
-                        </td>
-                        <td class="px-5 py-4">
-                            <span
-                                class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
-                                :class="
-                                    user.email_verified_at
-                                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                                        : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
-                                "
-                            >
-                                {{ user.email_verified_at ? 'Verificado' : 'Sin verificar' }}
-                            </span>
-                        </td>
-                    </tr>
-                    <tr v-if="users.data.length === 0">
-                        <td colspan="4" class="px-5 py-12 text-center text-gray-400 dark:text-gray-500">
-                            No hay usuarios registrados aún.
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <!--
+            Table: contenedor visual (card con border, bg-card, shadow, overflow hidden).
+            TableHeader: <thead> con bg-muted/60 y borde inferior.
+            TableHead: <th> con estilo uppercase, tracking-wide, text-muted-foreground.
+            TableBody: <tbody> con divide-y divide-border entre filas.
+            TableRow: <tr> con hover:bg-muted/40 y transition.
+            TableCell: <td> con padding y text-foreground estándar.
+            TableEmpty: fila de estado vacío centrada.
+        -->
+        <Table>
+            <TableHeader>
+                <tr>
+                    <TableHead>Nombre</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Registro</TableHead>
+                    <TableHead>Estado</TableHead>
+                </tr>
+            </TableHeader>
 
-        <!-- Pagination -->
+            <TableBody>
+                <TableRow v-for="user in users.data" :key="user.id">
+
+                    <!-- Nombre: text-foreground (color principal, negrita) -->
+                    <TableCell class="font-medium">
+                        {{ user.name }}
+                    </TableCell>
+
+                    <!-- Email: text-muted-foreground (secundario, apagado) -->
+                    <TableCell class="text-muted-foreground">
+                        {{ user.email }}
+                    </TableCell>
+
+                    <!-- Fecha: text-muted-foreground -->
+                    <TableCell class="text-muted-foreground">
+                        {{ formatDate(user.created_at) }}
+                    </TableCell>
+
+                    <!-- Estado: badge semántico (verde/amarillo) — color intencional, no de tema -->
+                    <TableCell>
+                        <span
+                            class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
+                            :class="
+                                user.email_verified_at
+                                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                                    : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                            "
+                        >
+                            {{ user.email_verified_at ? 'Verificado' : 'Sin verificar' }}
+                        </span>
+                    </TableCell>
+                </TableRow>
+
+                <!-- TableEmpty: se muestra si no hay usuarios -->
+                <TableEmpty
+                    v-if="users.data.length === 0"
+                    :colspan="4"
+                    message="No hay usuarios registrados aún."
+                />
+            </TableBody>
+        </Table>
+
+        <!-- Paginación -->
         <div
             v-if="users.last_page > 1"
             class="flex flex-col items-center justify-between gap-3 sm:flex-row"
         >
-            <p class="text-sm text-gray-500 dark:text-gray-400">
+            <p class="text-sm text-muted-foreground">
                 Mostrando {{ users.from }} – {{ users.to }} de {{ users.total }}
             </p>
             <div class="flex items-center gap-1">
-                <template
-                    v-for="(link, i) in users.links"
-                    :key="i"
-                >
+                <template v-for="(link, i) in users.links" :key="i">
                     <Link
                         v-if="link.url"
                         :href="link.url"
                         class="inline-flex h-8 min-w-[2rem] items-center justify-center rounded-lg px-2 text-sm transition-colors"
                         :class="[
                             link.active
-                                ? 'bg-gray-900 font-semibold text-white dark:bg-white dark:text-gray-900'
-                                : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700',
+                                ? 'bg-primary font-semibold text-primary-foreground'
+                                : 'text-muted-foreground hover:bg-muted',
                         ]"
                     >
                         {{ paginationLabel(link.label) }}
                     </Link>
                     <span
                         v-else
-                        class="inline-flex h-8 min-w-[2rem] cursor-not-allowed items-center justify-center rounded-lg px-2 text-sm text-gray-300 transition-colors dark:text-gray-600"
+                        class="inline-flex h-8 min-w-[2rem] cursor-not-allowed items-center justify-center rounded-lg px-2 text-sm text-muted-foreground/40"
                     >
                         {{ paginationLabel(link.label) }}
                     </span>
