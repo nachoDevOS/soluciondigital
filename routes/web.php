@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Public\ContactController;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +47,12 @@ Route::middleware(['auth', 'verified'])
         Route::get('users', [UserController::class, 'index'])
             ->middleware('permission:users.view')
             ->name('users');
+
+        // Solo usuarios con permiso 'roles.view' pueden ver la lista de roles.
+        // 'editor' NO tiene este permiso — solo 'admin' y 'super-admin'.
+        Route::get('roles', [RoleController::class, 'index'])
+            ->middleware('permission:roles.view')
+            ->name('roles');
     });
 
 // Fortify redirige a /dashboard después del login. Esta línea lo reenvía al panel real.

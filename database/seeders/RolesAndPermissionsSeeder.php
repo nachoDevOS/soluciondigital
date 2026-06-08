@@ -30,6 +30,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'users.edit',       // Editar datos de un usuario
             'users.delete',     // Eliminar un usuario
             'settings.view',    // Acceder a la configuración de perfil/seguridad
+            'roles.view',       // Ver la lista de roles y sus permisos
+            'roles.edit',       // Modificar permisos de un rol (solo super-admin)
         ];
 
         // firstOrCreate: si el permiso ya existe en DB no lo duplica, si no existe lo crea.
@@ -60,7 +62,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'users.view',
             'users.edit',
             'settings.view',
-            // Nota: 'users.delete' NO está aquí — admin no puede eliminar usuarios.
+            'roles.view',       // admin puede VER roles pero no editarlos
+            // Nota: 'users.delete' y 'roles.edit' NO están aquí — solo super-admin los tiene.
         ]);
 
         // ─────────────────────────────────────────────

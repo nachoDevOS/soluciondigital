@@ -53,6 +53,7 @@ const mobileMenuOpen = ref(false);
 const loginModalOpen = ref(false);
 const selectedFilter = ref<PortfolioFilter>('all');
 const authUser = computed(() => usePage().props.auth?.user ?? null);
+
 const scrollProgress = ref(0);
 const pointerX = ref(0);
 const pointerY = ref(0);
@@ -1432,6 +1433,14 @@ nav {
     align-items: center;
     gap: 12px;
 }
+
+.nav-actions .btn {
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    min-height: unset;
+}
+
 
 .mobile-actions {
     display: none;
