@@ -653,12 +653,54 @@ onBeforeUnmount(() => {
                     >
                         <div class="visual-card">
                             <div class="code-hero-display">
+                                <div class="hud-corners" aria-hidden="true">
+                                    <span></span><span></span><span></span><span></span>
+                                </div>
+                                <div class="scan-line" aria-hidden="true"></div>
                                 <div class="code-screen-top">
                                     <span></span><span></span><span></span>
                                 </div>
                                 <div class="code-screen-body">
-                                    <div class="code-lines-left">
-                                        <s></s><s></s><s></s><s></s><s></s>
+                                    <div class="hero-left-panel" aria-hidden="true">
+                                        <div class="hlp-header">
+                                            <span class="hlp-dot hlp-dot-on"></span>
+                                            <span class="hlp-title">Sistema Live</span>
+                                        </div>
+                                        <div class="hlp-stats">
+                                            <div class="hlp-stat">
+                                                <span class="hlp-stat-val">27</span>
+                                                <span class="hlp-stat-lbl">Clientes</span>
+                                            </div>
+                                            <div class="hlp-stat">
+                                                <span class="hlp-stat-val hlp-purple">99%</span>
+                                                <span class="hlp-stat-lbl">Uptime</span>
+                                            </div>
+                                        </div>
+                                        <div class="hlp-chart">
+                                            <svg viewBox="0 0 150 52" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                                                <defs>
+                                                    <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.35"/>
+                                                        <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
+                                                    </linearGradient>
+                                                </defs>
+                                                <path class="hlp-area" d="M0,46 L18,40 L36,34 L54,26 L72,30 L90,18 L108,11 L126,7 L150,3 L150,52 L0,52Z" fill="url(#areaGrad)"/>
+                                                <path class="hlp-line" d="M0,46 L18,40 L36,34 L54,26 L72,30 L90,18 L108,11 L126,7 L150,3" fill="none" stroke="#22d3ee" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <circle class="hlp-radar" cx="150" cy="3" r="3" fill="none" stroke="#22d3ee" stroke-width="1"/>
+                                                <circle cx="150" cy="3" r="3" fill="#22d3ee" class="hlp-dot-pulse"/>
+                                            </svg>
+                                            <span class="hlp-chart-lbl">ventas / mes ↑</span>
+                                        </div>
+                                        <div class="hlp-code">
+                                            <div class="cs-line"><span class="cs-kw">await</span> <span class="cs-fn">deploy</span>({ <span class="cs-prop">env</span>: <span class="cs-bool">'prod'</span> })</div>
+                                            <div class="cs-line"><span class="cs-cm">// ✓ 3 módulos activos</span></div>
+                                            <div class="cs-line cs-cursor">█</div>
+                                        </div>
+                                        <div class="hlp-pills">
+                                            <span class="hlp-pill hlp-on">● API</span>
+                                            <span class="hlp-pill hlp-on">● DB</span>
+                                            <span class="hlp-pill hlp-on">● Bot</span>
+                                        </div>
                                     </div>
                                     <div class="code-lines-right">
                                         <s></s><s></s><s></s><s></s><s></s>
@@ -1844,7 +1886,14 @@ nav {
 .code-hero-display {
     width: 100%;
     border-radius: 8px;
-    background: #050810;
+    background:
+        radial-gradient(ellipse at 15% 60%, rgb(6 182 212 / 20%) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 40%, rgb(168 85 247 / 16%) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 100%, rgb(6 182 212 / 10%) 0%, transparent 45%),
+        linear-gradient(rgb(6 182 212 / 12%) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(6 182 212 / 12%) 1px, transparent 1px),
+        #050810;
+    background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px;
     border: 1px solid rgb(6 182 212 / 12%);
     overflow: hidden;
     box-shadow: inset 0 0 60px rgb(0 0 0 / 50%);
@@ -1895,6 +1944,212 @@ nav {
 
 .code-lines-left { left: 16px; }
 .code-lines-right { right: 16px; align-items: flex-end; }
+
+.hero-left-panel {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.hlp-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.hlp-dot-on {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22d3ee;
+    box-shadow: 0 0 6px #22d3ee;
+    animation: cursorBlink 2s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+.hlp-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.hlp-stats {
+    display: flex;
+    gap: 10px;
+}
+
+.hlp-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: rgb(6 182 212 / 8%);
+    border: 1px solid rgb(6 182 212 / 15%);
+    border-radius: 6px;
+    padding: 6px 10px;
+    flex: 1;
+}
+
+.hlp-stat-val {
+    font-size: 18px;
+    font-weight: 800;
+    color: #22d3ee;
+    line-height: 1;
+}
+
+.hlp-purple { color: #a855f7 !important; }
+
+.hlp-stat-lbl {
+    font-size: 9px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hlp-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.hlp-chart svg {
+    width: 100%;
+    height: 44px;
+    border-radius: 4px;
+    overflow: visible;
+}
+
+.hlp-dot-pulse {
+    animation: dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+    0%, 100% { r: 3; opacity: 1; }
+    50% { r: 4.5; opacity: 0.7; }
+}
+
+.hlp-radar {
+    animation: radarRing 2s ease-out infinite;
+    transform-origin: 150px 3px;
+}
+
+@keyframes radarRing {
+    0%   { r: 3;  opacity: 0.9; stroke-width: 1.5; }
+    100% { r: 14; opacity: 0;   stroke-width: 0.3; }
+}
+
+.hlp-line {
+    stroke-dasharray: 260;
+    stroke-dashoffset: 260;
+    animation: drawChart 2s ease-out forwards;
+}
+
+@keyframes drawChart {
+    to { stroke-dashoffset: 0; }
+}
+
+.hud-corners {
+    position: absolute;
+    inset: 6px;
+    pointer-events: none;
+    z-index: 6;
+}
+
+.hud-corners span {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-color: rgb(6 182 212 / 55%);
+    border-style: solid;
+}
+
+.hud-corners span:nth-child(1) { top: 0;    left: 0;  border-width: 2px 0 0 2px; }
+.hud-corners span:nth-child(2) { top: 0;    right: 0; border-width: 2px 2px 0 0; }
+.hud-corners span:nth-child(3) { bottom: 0; left: 0;  border-width: 0 0 2px 2px; }
+.hud-corners span:nth-child(4) { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+
+.scan-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgb(6 182 212 / 70%) 40%, rgb(168 85 247 / 50%) 60%, transparent 100%);
+    box-shadow: 0 0 8px rgb(6 182 212 / 40%);
+    animation: scanDown 4s linear infinite;
+    z-index: 5;
+    pointer-events: none;
+}
+
+@keyframes scanDown {
+    0%   { top: 36px;  opacity: 0; }
+    5%   { opacity: 1; }
+    95%  { opacity: 1; }
+    100% { top: 100%;  opacity: 0; }
+}
+
+.hlp-chart-lbl {
+    font-size: 9px;
+    color: #22d3ee;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.7;
+}
+
+.hlp-code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 10px;
+    line-height: 1.7;
+    background: rgb(0 0 0 / 30%);
+    border: 1px solid rgb(255 255 255 / 5%);
+    border-radius: 4px;
+    padding: 6px 8px;
+}
+
+.hlp-pills {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.hlp-pill {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 3px 7px;
+    border-radius: 999px;
+    letter-spacing: 0.3px;
+}
+
+.hlp-on {
+    background: rgb(6 182 212 / 12%);
+    border: 1px solid rgb(6 182 212 / 30%);
+    color: #22d3ee;
+}
+
+.cs-line { white-space: nowrap; color: #94a3b8; font-size: 10px; }
+.cs-i { padding-left: 12px; }
+
+.cs-kw   { color: #22d3ee; }
+.cs-fn   { color: #a78bfa; }
+.cs-var  { color: #e2e8f0; }
+.cs-cm   { color: #475569; font-style: italic; }
+.cs-prop { color: #7dd3fc; }
+.cs-bool { color: #f472b6; }
+
+.cs-cursor {
+    color: #22d3ee;
+    animation: cursorBlink 1.1s step-start infinite;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
 
 .code-lines-left s,
 .code-lines-right s {
