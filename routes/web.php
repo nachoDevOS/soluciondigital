@@ -64,6 +64,17 @@ Route::middleware(['auth', 'verified'])
         Route::get('roles', [RoleController::class, 'index'])
             ->middleware('permission:roles.view')
             ->name('roles');
+
+        // Crear un rol nuevo. Solo 'super-admin' tiene 'roles.edit'.
+        Route::post('roles', [RoleController::class, 'store'])
+            ->middleware('permission:roles.edit')
+            ->name('roles.store');
+
+        // Actualizar los permisos de un rol existente.
+        // {role} es el ID del rol — Laravel lo resuelve automáticamente (Route Model Binding).
+        Route::put('roles/{role}', [RoleController::class, 'update'])
+            ->middleware('permission:roles.edit')
+            ->name('roles.update');
     });
 
 // Fortify redirige a /dashboard después del login. Esta línea lo reenvía al panel real.

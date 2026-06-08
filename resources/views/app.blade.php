@@ -129,7 +129,7 @@
                     }
                 }
 
-                @if ($isWelcomePage)
+                @if ($isPublic)
                     document.documentElement.classList.add('app-loading');
                     window.setTimeout(function() {
                         document.documentElement.classList.add('app-ready');
