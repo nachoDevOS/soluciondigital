@@ -70,7 +70,7 @@ GET  /admin/users     → admin/users/Index.vue        (auth+verified)
 ```
 
 Fortify gestiona login, 2FA, reset y verificación. **Registro desactivado** — usuarios solo via `php artisan db:seed`.
-Dev: `admin@admin.com` / `password`.
+Dev: `admin@soluciondigital.dev` / `password`.
 
 ### Estructura de páginas (`resources/js/pages/`)
 

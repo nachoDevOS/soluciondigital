@@ -22,15 +22,10 @@ class DatabaseSeeder extends Seeder
         //   - Si no existe → crea un usuario nuevo con ambos arrays combinados.
         // Esto hace que el seeder sea idempotente (seguro de correr múltiples veces).
         $admin = User::updateOrCreate(
-            // Condición de búsqueda: buscar por este email.
-            ['email' => 'admin@admin.com'],
-            // Datos a crear o actualizar.
+            ['email' => 'admin@soluciondigital.dev'],
             [
                 'name' => 'Administrador',
-                // 'password' se hashea automáticamente por el cast 'hashed' del modelo.
                 'password' => 'password',
-                // email_verified_at con valor = email ya verificado, puede entrar al panel.
-                // Sin este campo, Fortify redirige a /email/verify en cada login.
                 'email_verified_at' => now(),
             ],
         );
