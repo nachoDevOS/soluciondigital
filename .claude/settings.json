@@ -3,7 +3,16 @@
     "allow": [
       "Skill(caveman:caveman)",
       "Skill(caveman:caveman:*)",
-      "Bash(xargs ls -la)"
+      "Bash(xargs ls -la)",
+      "Bash(composer run dev > /tmp/dev-server.log 2>&1 & *)",
+      "Bash(npx playwright *)",
+      "Bash(curl -s http://127.0.0.1:8001)",
+      "Bash(npx --yes playwright --version)",
+      "Bash(node index2.mjs)",
+      "Bash(node -e ' *)"
+    ],
+    "additionalDirectories": [
+      "/tmp"
     ]
   }
 }
