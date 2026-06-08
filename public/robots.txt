@@ -1,2 +1,12 @@
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin/
+Disallow: /settings/
+Disallow: /login
+Disallow: /two-factor-challenge
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /verify-email
+Disallow: /email/
+
+Sitemap: https://soluciondigital.dev/sitemap.xml

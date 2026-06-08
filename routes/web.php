@@ -15,6 +15,17 @@ use Illuminate\Support\Facades\Route;
 Route::inertia('/', 'public/Welcome')->name('home');
 Route::inertia('/about', 'public/About')->name('about');
 
+Route::get('/sitemap.xml', function () {
+    $pages = [
+        ['url' => url('/'),         'priority' => '1.0',  'changefreq' => 'weekly'],
+        ['url' => url('/about'),    'priority' => '0.7',  'changefreq' => 'monthly'],
+        ['url' => url('/contact'),  'priority' => '0.6',  'changefreq' => 'monthly'],
+    ];
+    return response()
+        ->view('sitemap', compact('pages'))
+        ->header('Content-Type', 'application/xml');
+})->name('sitemap');
+
 Route::get('/contact', fn () => inertia('public/Contact'))->name('contact');
 
 // El formulario de contacto hace POST a este endpoint → ContactController::store
